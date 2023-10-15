@@ -4,8 +4,8 @@ import PetSeekerlogo from '../../public/images/petSeekerlogo.png'
 
 export const Navbar = () => {
   return (
-    <main>
-        <nav className="relative p-4 flex justify-between items-center bg-white shadow-xl">
+
+        <nav className="relative p-4 flex justify-between items-center bg-light shadow-xl rounded">
 		<a className="text-3xl font-bold leading-none" href="#">
             <Image
                 className='hover:scale-125'
@@ -47,7 +47,7 @@ export const Navbar = () => {
 		<a className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" href="#">Sign up</a>
 	</nav>
 	
-    </main>
+  
     
   )
 }
