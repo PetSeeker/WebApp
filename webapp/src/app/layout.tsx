@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <PrimeReactProvider>
-        <body className={`${inter.className}`}>
+        <body className={`${inter.className} bg-light`}>
           <Navbar />
           {children}
         </body>

@@ -13,6 +13,7 @@ import Animaladopt from '../../public/images/animaladopt.png'
 import Animallost from '../../public/images/animallost1.jpeg'
 import Animaldescription from '../../public/images/animaldescription.png'
 import Customersupport from '../../public/images/customersupport1.png'
+import Developer from '../../public/images/developer.png'
 import { TabView, TabPanel } from 'primereact/tabview';
 import 'primeicons/primeicons.css';
 import { Card } from 'primereact/card';
@@ -36,6 +37,9 @@ export default function Home() {
   const header5 = (
     <Image alt="Card" src={Customersupport} />
   );
+  const header6 = (
+    <Image alt="Card" src={Developer} />
+  );
 
   const fadeInVariants = {
     initial: {
@@ -50,6 +54,20 @@ export default function Home() {
       },
     }
   }  
+
+  const fadeOutVariants = {
+    initial: {
+      opacity: 0,
+      y: 0,
+    },
+    animate: {
+      opacity: 1,
+      y: 150,
+      transition: {
+        duration: 1.5,
+      },
+    }
+  } 
 
   const fadeOpacity = {
     initial: {
@@ -66,16 +84,16 @@ export default function Home() {
   return (
     <> 
       
-      <Layout className='flex items-center justify-center flex-col bg-[url("../../public/images/teste.jpeg")] bg-no-repeat bg-cover'>
+      <Layout className='flex items-center justify-center flex-col bg-[url("../../public/images/teste.jpeg")] bg-no-repeat bg-cover bg-center'>
       <AnimatedText text='PetSeeker' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-16 mt-8 '/>
       
         <div className='w-full flex items-center justify-center drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-2xl text-gray-300'>
           <h1>Find your new best friend here!</h1>
         </div>
         <div className='w-full flex flex-row mt-4 space-x-4'>
-          <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2 shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105 '>
+          <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2 shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105 hover:border-blue-400 '>
             <a href='/'>
-              <div className="flex flex-col items-center">
+              <motion.div className="flex flex-col items-center" variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
                 <Image
                 className='w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid'
                 src={Dog}
@@ -84,12 +102,12 @@ export default function Home() {
                 />
                 <h5 className="text-sm font-medium text-gray-900 dark:text-white">Dogs</h5>
                 <span className="text-sm text-gray-500 dark:text-gray-400">Search</span>
-              </div>
+              </motion.div>
             </a> 
           </div>
-          <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2  shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105'>
+          <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2  shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105 hover:border-blue-400'>
             <a href='/'>
-              <div className="flex flex-col items-center">
+              <motion.div className="flex flex-col items-center" variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
                 <Image
                 className='w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid'
                 src={Cat}
@@ -98,12 +116,12 @@ export default function Home() {
                 />
                 <h5 className="text-sm font-medium text-gray-900 dark:text-white">Cats</h5>
                 <span className="text-sm text-gray-500 dark:text-gray-400">Search</span>
-              </div>
+              </motion.div>
             </a>  
           </div>
-          <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2 shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105'>
+          <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2 shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105 hover:border-blue-400'>
             <a href='/'>
-              <div className="flex flex-col items-center">
+              <motion.div className="flex flex-col items-center" variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
                 <Image
                 className='w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid'
                 src={Bird}
@@ -112,12 +130,12 @@ export default function Home() {
                 />
                 <h5 className="text-sm font-medium text-gray-900 dark:text-white">Birds</h5>
                 <span className="text-sm text-gray-500 dark:text-gray-400">Search</span>
-              </div>
+              </motion.div>
             </a>       
           </div>
-          <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2 shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105'>
+          <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2 shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105 hover:border-blue-400'>
             <a href='/'>
-              <div className="flex flex-col items-center">
+              <motion.div className="flex flex-col items-center" variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
                 <Image
                 className='w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid'
                 src={Horse}
@@ -126,7 +144,7 @@ export default function Home() {
                 />
                 <h5 className="text-sm font-medium text-gray-900 dark:text-white">Horses</h5>
                 <span className="text-sm text-gray-500 dark:text-gray-400">Search</span>
-              </div>
+              </motion.div>
             </a>  
           </div>
         </div>
@@ -137,10 +155,10 @@ export default function Home() {
           About Our App
         </div>
         <div className='w-full flex flex-col bg-blue-200 bg-opacity-75 border border-solid rounded-2xl p-8 mt-4 shadow-xl shadow-blue-300 text-center'>
-          <div className='w-full flex flex-col hover:scale-105 items-center justify-center bg-blue-300 bg-opacity-25 border-2 rounded-lg p-4 space-y-2'>
-            <motion.h2 className='text-lg'
+          <div className='w-full flex flex-col hover:scale-105 items-center justify-center bg-blue-300 bg-opacity-25 border-2 rounded-lg p-4'>
+            <motion.h2 className='text-xl mb-4 underline decoration-sky-500'
             variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}
-            >Welcome to <b>PetSeeker</b>, where your journey to find the perfect animal companion begins.</motion.h2>
+            >Welcome to <b className=''>PetSeeker</b>, where your journey to find the perfect animal companion begins.</motion.h2>
             <motion.h2 className='text-lg'
             variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}
             >We are more than just a platform, we're your partner in creating lifelong bonds and unforgettable memories.</motion.h2>
@@ -173,12 +191,18 @@ export default function Home() {
                   A user-friendly and secure platform designed with your convenience in mind.
                   </p>
               </TabPanel>
+              <TabPanel header="5rd Point" leftIcon="pi pi-star mr-2">
+                  <p className="m-0">
+                  24 hour support from dedicated and knowledgeable people
+                  </p>
+              </TabPanel>
           </TabView>
+          
           </motion.div> 
           <p className="text-gray-600 mt-6 text-lg drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">Join us in this journey of love, compassion, and the joy of finding your perfect animal companion. Your next adventure awaits!</p>  
         </div> 
         </Layout>
-        <Layout className='flex bg-light'>
+        <Layout className='flex bg-[url("../../public/images/garden.png")] bg-no-repeat bg-cover bg-center'>
           <motion.div className='w-1/3' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
             <Image
             className=''
@@ -234,33 +258,15 @@ export default function Home() {
             <h1 className='text-4xl text-center'> Our Team</h1>
             <motion.div className='w-full flex mt-8 items-center justify-center' variants={fadeInVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
               <div className='w-1/4 mx-2 hover:scale-105 '>
-                <Card title="Tiago Bastos" header={header1} className="">
-                <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem'}}></i></a>
-                <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                <Card title="Tiago Bastos" header={header6} className="">
+                  <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem'}}></i></a>
+                  <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
                 </Card>
               </div>
               <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Miguel Tavares" header={header2} className="">
-                <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
-                <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                </Card>
-              </div>
-              <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="João Torrinhas" header={header2} className="">
-                <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
-                <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                </Card>
-              </div>
-            </motion.div>
-            <motion.div className='w-full flex mt-4 items-center justify-center' variants={fadeInVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
-              <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Diogo Torrinhas" header={header2} className="">
+                <Card title="Miguel Tavares" header={header6} className="">
                   <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
                   <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
                   <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
@@ -268,16 +274,34 @@ export default function Home() {
                 </Card>
               </div>
               <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="David Raposo" header={header2} className="">
-                <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
-                <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                <Card title="João Torrinhas" header={header6} className="">
+                  <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
+                  <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                </Card>
+              </div>
+            </motion.div>
+            <motion.div className='w-full flex mt-4 items-center justify-center' variants={fadeInVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
+              <div className='w-1/4 mx-2 hover:scale-105'>
+                <Card title="Diogo Torrinhas" header={header6} className="">
+                  <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
+                  <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                </Card>
+              </div>
+              <div className='w-1/4 mx-2 hover:scale-105'>
+                <Card title="David Raposo" header={header6} className="">
+                  <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
+                  <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
                 </Card>
               </div>
             </motion.div>
           </div>
-          <motion.div className='w-1/3 mt-16 items-center justify-center' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
+          <motion.div className='w-1/3 mt-16 items-center justify-center' variants={fadeOutVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
             <Image
             className=''
             src={Team}
