@@ -14,6 +14,7 @@ import Animallost from '../../public/images/animallost1.jpeg'
 import Animaldescription from '../../public/images/animaldescription.png'
 import Customersupport from '../../public/images/customersupport1.png'
 import Developer from '../../public/images/developer.png'
+import Question from '../../public/images/question.png'
 import { TabView, TabPanel } from 'primereact/tabview';
 import 'primeicons/primeicons.css';
 import { Card } from 'primereact/card';
@@ -202,6 +203,29 @@ export default function Home() {
           <p className="text-gray-600 mt-6 text-lg drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">Join us in this journey of love, compassion, and the joy of finding your perfect animal companion. Your next adventure awaits!</p>  
         </div> 
         </Layout>
+        <Layout className='flex bg-light '>
+          <motion.div className='w-2/3 flex-col bg-yellow-900 bg-opacity-10 p-12 space-y-4 border border-solid rounded-2xl hover:border-blue-500 text-xl
+          shadow-md shadow-yellow-950 hover:scale-105' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
+            <h1 className='text-4xl font-bold mb-8'>Have one of the following questions? Our app is perfect for you!</h1>
+            <ul className='list-disc space-y-4 underline decoration-yellow-700'>
+              <li><h1>Ready to welcome a new member to your family or farm?</h1></li>
+              <li><h1>Curious about the joy of adopting a new friend?</h1></li>
+              <li><h1>Ready to reunite lost pets with their families?</h1></li>
+              <li><h1>Curious about the stories behind these lovely animals?</h1></li>
+              <li><h1>Need a helping hand on your pet journey?</h1></li>
+            </ul>
+            
+          </motion.div>
+          <motion.div className='w-1/3 translate-y-16' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
+            <Image
+            className=''
+            src={Question}
+            priority={true}
+            alt="Questions Image"
+            />
+          </motion.div>
+        </Layout>
+        <hr/>
         <Layout className='flex bg-[url("../../public/images/garden.png")] bg-no-repeat bg-cover bg-center'>
           <motion.div className='w-1/3' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
             <Image
@@ -212,7 +236,7 @@ export default function Home() {
             />
           </motion.div>
           <div className='w-2/3 flex-col'>
-            <h1 className='text-4xl text-center'> Our Services</h1>
+            <h1 className='text-4xl text-center font-bold'> Our Services</h1>
             <motion.div className='w-full flex mt-8' variants={fadeInVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
               <div className='w-1/4 mx-2 hover:scale-105'>
                 <Card title="Pet Purchase" header={header1} className="h-full">
@@ -255,7 +279,7 @@ export default function Home() {
         <hr/>
         <Layout className='flex bg-light'>
           <div className='w-2/3 flex-col'>
-            <h1 className='text-4xl text-center'> Our Team</h1>
+            <h1 className='text-4xl text-center font-bold'> Our Team</h1>
             <motion.div className='w-full flex mt-8 items-center justify-center' variants={fadeInVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
               <div className='w-1/4 mx-2 hover:scale-105 '>
                 <Card title="Tiago Bastos" header={header6} className="">
