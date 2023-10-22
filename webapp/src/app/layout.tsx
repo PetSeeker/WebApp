@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import {Navbar} from '../components/Navbar'
 import { PrimeReactProvider } from 'primereact/api';
 import 'primereact/resources/themes/lara-light-blue/theme.css';
+import { Footer } from '../components/Footer.js';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -24,6 +25,7 @@ export default function RootLayout({
         <body className={`${inter.className} bg-light`}>
           <Navbar />
           {children}
+          <Footer />
         </body>
       </PrimeReactProvider>
     </html>

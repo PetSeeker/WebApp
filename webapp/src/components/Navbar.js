@@ -6,7 +6,7 @@ export const Navbar = () => {
   return (
 
         <nav className="relative p-4 flex justify-between items-center bg-light shadow-xl rounded">
-		<a className="text-3xl font-bold leading-none" href="#">
+		<a className="text-3xl font-bold leading-none" href="/">
             <Image
                 className='hover:scale-125'
                 src={PetSeekerlogo}
