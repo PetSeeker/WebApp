@@ -1,8 +1,42 @@
+'use client';
 import React from 'react'
 import Image from 'next/image'
 import PetSeekerlogo from '../../public/images/petSeekerlogo.png'
+import {useState, useEffect} from 'react'
+import {FaUserAlt} from 'react-icons/fa'
 
 export const Navbar = () => {
+
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+	const toggleDropdown = () => {
+		setIsDropdownOpen(!isDropdownOpen);
+	};
+	const [token, setToken] = useState('');
+
+	useEffect(() => {
+		const url = window.location.href;
+		const urlParams = new URLSearchParams(url);
+		const accessToken = urlParams.get('code');
+	
+		if (accessToken) {
+		  setToken(accessToken);
+		}
+	}, []);
+	
+	useEffect(() => {
+		if (token) {
+			setIsAuthenticated(true);
+		}
+		else{
+			setIsAuthenticated(false);
+		}
+		// Log the token when it changes
+		console.log("access-token:", token);
+		console.log("está autenticado: ", isAuthenticated);
+	}, [token, isAuthenticated]);
+
   return (
 
         <nav className="relative p-4 flex justify-between items-center bg-light shadow-xl rounded">
@@ -43,8 +77,59 @@ export const Navbar = () => {
 			</li>
 			<li><a className="text-sm font-bold text-gray-400 hover:text-blue-500" href="#">Contact</a></li>
 		</ul>
-		<a className=" hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  rounded-xl transition duration-200" href="#">Sign In</a>
-		<a className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" href="#">Sign up</a>
+		{isAuthenticated ? (
+			<div className="relative">
+			<button
+				onClick={toggleDropdown}
+				className="text-white bg-gray-500 hover:text-black hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+				type="button"
+			>
+				User &nbsp;<FaUserAlt/>
+				<svg
+				className="w-2.5 h-2.5 ml-2.5"
+				aria-hidden="true"
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 10 6"
+				>
+				<path
+					stroke="currentColor"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					strokeWidth="2"
+					d="m1 1 4 4 4-4"
+				/>
+				</svg>
+			</button>
+			{isDropdownOpen && (
+				<div className="z-10 absolute mt-2 bg-light w-full border border-solid rounded-xl">
+					<ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDelayButton">
+						<li>
+						<a href="#" className="block px-4 py-2 hover:bg-gray-100" >
+							Profile
+						</a>
+						</li>
+						<li>
+						<a href="#" className="block px-4 py-2 hover:bg-gray-100">
+							My Listings
+						</a>
+						</li>
+						<li>
+						<a href="#" className="block px-4 py-2 hover-bg-gray-10">
+							Sign out
+						</a>
+						</li>
+					</ul>
+				</div>
+			)}
+			</div>
+		) : (
+			<>
+			<a className=" hidden lg:inline-block  lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  rounded-xl transition duration-200" href="https://es-auth.auth.eu-north-1.amazoncognito.com/login?client_id=4vfhkg69f4p5gufq53bpk0llo1&response_type=token&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F">Sign In</a>
+			{/* <a className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" href="#">Sign up</a> */}
+			</>
+		) 	
+		}
 	</nav>
 	
   

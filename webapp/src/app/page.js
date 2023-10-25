@@ -203,7 +203,7 @@ export default function Home() {
           <p className="text-gray-600 mt-6 text-lg drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">Join us in this journey of love, compassion, and the joy of finding your perfect animal companion. Your next adventure awaits!</p>  
         </div> 
         </Layout>
-        <Layout className='flex bg-light '>
+        <Layout className='flex bg-light'>
           <motion.div className='w-2/3 flex-col bg-yellow-900 bg-opacity-10 p-12 space-y-4 border border-solid rounded-2xl hover:border-blue-500 text-xl
           shadow-md shadow-yellow-950 hover:scale-105' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
             <h1 className='text-4xl font-bold mb-8'>Have one of the following questions? Our app is perfect for you!</h1>
