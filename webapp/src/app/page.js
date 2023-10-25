@@ -162,10 +162,10 @@ export default function Home() {
             >Welcome to <b className=''>PetSeeker</b>, where your journey to find the perfect animal companion begins.</motion.h2>
             <motion.h2 className='text-lg'
             variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}
-            >We are more than just a platform, we're your partner in creating lifelong bonds and unforgettable memories.</motion.h2>
-            <motion.h2 className='text-lg'
+            >We are more than just a platform, we are your partner in creating lifelong bonds and unforgettable memories.</motion.h2>
+            <motion.h2 className='text-lg'  
             variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}
-            >Our mission is to make the process of buying or adopting animals as joyful and seamless as possible. We're here to help you find the ideal furry friend, feathered companion, or scaly buddy that fits your lifestyle and fills your heart with love.</motion.h2> 
+            >Our mission is to make the process of buying or adopting animals as joyful and seamless as possible. We are here to help you find the ideal furry friend, feathered companion, or scaly buddy that fits your lifestyle and fills your heart with love.</motion.h2> 
           </div>  
           <h1 className='text-2xl text-gray-500 mt-4 font-semibold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-2'> What set us apart from others:</h1>
           <motion.div className='w-full flex hover:scale-105 items-center justify-center bg-blue-200 bg-opacity-0'
