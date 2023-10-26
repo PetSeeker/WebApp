@@ -7,35 +7,35 @@ import {FaUserAlt} from 'react-icons/fa'
 
 export const Navbar = () => {
 
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [isAuthenticated, setIsAuthenticated] = useState(true);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
 	const toggleDropdown = () => {
 		setIsDropdownOpen(!isDropdownOpen);
 	};
-	const [token, setToken] = useState('');
+	// const [token, setToken] = useState('');
 
-	useEffect(() => {
-		const url = window.location.href;
-		const urlParams = new URLSearchParams(url);
-		const accessToken = urlParams.get('code');
+	// useEffect(() => {
+	// 	const url = window.location.href;
+	// 	const urlParams = new URLSearchParams(url);
+	// 	const accessToken = urlParams.get('code');
 	
-		if (accessToken) {
-		  setToken(accessToken);
-		}
-	}, []);
+	// 	if (accessToken) {
+	// 	  setToken(accessToken);
+	// 	}
+	// }, []);
 	
-	useEffect(() => {
-		if (token) {
-			setIsAuthenticated(true);
-		}
-		else{
-			setIsAuthenticated(false);
-		}
-		// Log the token when it changes
-		console.log("access-token:", token);
-		console.log("está autenticado: ", isAuthenticated);
-	}, [token, isAuthenticated]);
+	// useEffect(() => {
+	// 	if (token) {
+	// 		setIsAuthenticated(true);
+	// 	}
+	// 	else{
+	// 		setIsAuthenticated(false);
+	// 	}
+	// 	// Log the token when it changes
+	// 	console.log("access-token:", token);
+	// 	console.log("está autenticado: ", isAuthenticated);
+	// }, [token, isAuthenticated]);
 
   return (
 
@@ -110,7 +110,7 @@ export const Navbar = () => {
 						</a>
 						</li>
 						<li>
-						<a href="#" className="block px-4 py-2 hover:bg-gray-100">
+						<a href="/createPub" className="block px-4 py-2 hover:bg-gray-100">
 							My Listings
 						</a>
 						</li>

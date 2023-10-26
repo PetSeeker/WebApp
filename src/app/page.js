@@ -226,15 +226,16 @@ export default function Home() {
           </motion.div>
         </Layout>
         <hr/>
-        <Layout className='flex bg-[url("../../public/images/garden.png")] bg-no-repeat bg-cover bg-center'>
-          <motion.div className='w-1/3' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
+        <Layout className='flex items-center justify-center'>
+        {/* <Layout className='flex bg-[url("../../public/images/garden.png")] bg-no-repeat bg-cover bg-center items-center justify-center'> */}
+          {/* <motion.div className='w-1/3' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
             <Image
             className=''
             src={Services}
             priority={true}
             alt="Services"
             />
-          </motion.div>
+          </motion.div> */}
           <div className='w-2/3 flex-col'>
             <h1 className='text-4xl text-center font-bold'> Our Services</h1>
             <motion.div className='w-full flex mt-8' variants={fadeInVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
@@ -277,7 +278,7 @@ export default function Home() {
           </div>
         </Layout>
         <hr/>
-        <Layout className='flex bg-light'>
+        <Layout className='flex bg-light items-center justify-center'>
           <div className='w-2/3 flex-col'>
             <h1 className='text-4xl text-center font-bold'> Our Team</h1>
             <motion.div className='w-full flex mt-8 items-center justify-center' variants={fadeInVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
@@ -325,14 +326,14 @@ export default function Home() {
               </div>
             </motion.div>
           </div>
-          <motion.div className='w-1/3 mt-16 items-center justify-center' variants={fadeOutVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
+          {/* <motion.div className='w-1/3 mt-16 items-center justify-center' variants={fadeOutVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
             <Image
             className=''
             src={Team}
             priority={true}
             alt="Team"
             />
-          </motion.div>
+          </motion.div> */}
         </Layout>
     
     </>
