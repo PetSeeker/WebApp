@@ -9,7 +9,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { useState } from 'react';
 import { FileUpload } from 'primereact/fileupload';
 
-export default function createPub(){
+export default function CreatePub(){
 
     const [name, setName] = useState('');
     const [type, setType] = useState('');
