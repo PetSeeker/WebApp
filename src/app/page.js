@@ -226,7 +226,7 @@ export default function Home() {
           </motion.div>
         </Layout>
         <hr/>
-        <Layout className='flex items-center justify-center'>
+        <Layout className='flex items-center justify-center bg-gray-200'>
         {/* <Layout className='flex bg-[url("../../public/images/garden.png")] bg-no-repeat bg-cover bg-center items-center justify-center'> */}
           {/* <motion.div className='w-1/3' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
             <Image

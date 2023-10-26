@@ -27,6 +27,7 @@ module.exports = {
         sage: "#CDC6A5", 
         sage2: "#fefbf5",
         green2: "#B1DE5E",
+        grayhome: "#59656F",
       },
     },
   },

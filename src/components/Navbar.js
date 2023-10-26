@@ -110,7 +110,7 @@ export const Navbar = () => {
 						</a>
 						</li>
 						<li>
-						<a href="/createPub" className="block px-4 py-2 hover:bg-gray-100">
+						<a href="/myListings" className="block px-4 py-2 hover:bg-gray-100">
 							My Listings
 						</a>
 						</li>
