@@ -80,7 +80,7 @@ export default function CreatePub(){
                     </div>
                     <div className='w-full flex'>
                         <div className="p-float-label w-full">
-                            <InputTextarea id="username" value={description} onChange={(e) => setDescription(e.target.value)} rows={5} cols={30} className='w-full'/>
+                            <InputTextarea id="username" value={description} onChange={(e) => setDescription(e.target.value)} rows={5} cols={30} className='w-full rounded-xl'/>
                             <label htmlFor="username">Description</label>
                         </div>
                     </div>

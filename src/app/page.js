@@ -3,8 +3,8 @@ import Image from 'next/image'
 import Layout from '../components/Layout'
 import AnimatedText from '../components/AnimatedText'
 import Dog from '../../public/images/dog.png'
-import Cat from '../../public/images/cat.png'
-import Bird from '../../public/images/bird.png'
+import Cat from '../../public/images/cat2.png'
+import Bird from '../../public/images/bird3.png'
 import Horse from '../../public/images/horse.png'
 import Services from '../../public/images/services.png'
 import Team from '../../public/images/team.png'
@@ -14,7 +14,7 @@ import Animallost from '../../public/images/animallost1.jpeg'
 import Animaldescription from '../../public/images/animaldescription.png'
 import Customersupport from '../../public/images/customersupport1.png'
 import Developer from '../../public/images/developer.png'
-import Question from '../../public/images/question.png'
+import Question from '../../public/images/question3.png'
 import { TabView, TabPanel } from 'primereact/tabview';
 import 'primeicons/primeicons.css';
 import { Card } from 'primereact/card';
@@ -85,7 +85,7 @@ export default function Home() {
   return (
     <> 
       
-      <Layout className='flex items-center justify-center flex-col bg-[url("../../public/images/teste.jpeg")] bg-no-repeat bg-cover bg-center'>
+      <Layout className='flex items-center justify-center flex-col bg-[url("../../public/images/imageteste.png")] bg-no-repeat bg-cover bg-center'>
       <AnimatedText text='PetSeeker' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-16 mt-8 '/>
       
         <div className='w-full flex items-center justify-center drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-2xl text-gray-300'>
@@ -149,13 +149,13 @@ export default function Home() {
             </a>  
           </div>
         </div>
-        <div className='w-full flex items-center justify-center mt-8 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-2xl text-gray-300'>
-         <Button label="And more ..." severity="secondary" rounded className='p-2 shadow-lg shadow-white hover:scale-105 bg-blue-400'/>
+        <div className='w-full flex items-center justify-center mt-8 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-2xl text-white'>
+         <Button label="Other animals" severity="secondary" rounded className='p-2 shadow-lg shadow-white hover:scale-105 bg-sage2 bg-opacity-80'/>
         </div>
-        <div id='aboutus' className='w-full flex font-bold text-4xl drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] items-center justify-center mt-8 text-gray-300'>
+        {/* <div id='aboutus' className='w-full flex font-bold text-4xl drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] items-center justify-center mt-8 text-gray-300'>
           About Our App
-        </div>
-        <div className='w-full flex flex-col bg-blue-200 bg-opacity-75 border border-solid rounded-2xl p-8 mt-4 shadow-xl shadow-blue-300 text-center'>
+        </div> */}
+        {/* <div className='w-full flex flex-col bg-blue-200 bg-opacity-75 border border-solid rounded-2xl p-8 mt-4 shadow-xl shadow-blue-300 text-center'>
           <div className='w-full flex flex-col hover:scale-105 items-center justify-center bg-blue-300 bg-opacity-25 border-2 rounded-lg p-4'>
             <motion.h2 className='text-xl mb-4 underline decoration-sky-500'
             variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}
@@ -173,27 +173,27 @@ export default function Home() {
           >
             <TabView panelContainerClassName='shadow-md shadow-blue-500'>
               <TabPanel header="1st Point" leftIcon="pi pi-star mr-2" headerClassName='' >
-                  <p className="m-0">
+                  <p className="m-0 text-center">
                   A wide variety of animals available for purchase and adoption.
                   </p>
               </TabPanel>
               <TabPanel header="2nd Point" leftIcon="pi pi-star mr-2">
-                  <p className="m-0">
+                  <p className="m-0 text-center">
                   Comprehensive profiles and information to help you make informed decisions.
                   </p>
               </TabPanel>
               <TabPanel header="3rd Point" leftIcon="pi pi-star mr-2">
-                  <p className="m-0">
+                  <p className="m-0 text-center">
                   A community that shares your passion for responsible pet ownership.
                   </p>
               </TabPanel>
               <TabPanel header="4rd Point" leftIcon="pi pi-star mr-2">
-                  <p className="m-0">
+                  <p className="m-0 text-center">
                   A user-friendly and secure platform designed with your convenience in mind.
                   </p>
               </TabPanel>
               <TabPanel header="5rd Point" leftIcon="pi pi-star mr-2">
-                  <p className="m-0">
+                  <p className="m-0 text-center">
                   24 hour support from dedicated and knowledgeable people
                   </p>
               </TabPanel>
@@ -201,10 +201,10 @@ export default function Home() {
           
           </motion.div> 
           <p className="text-gray-600 mt-6 text-lg drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">Join us in this journey of love, compassion, and the joy of finding your perfect animal companion. Your next adventure awaits!</p>  
-        </div> 
+        </div>  */}
         </Layout>
         <Layout className='flex bg-light'>
-          <motion.div className='w-2/3 flex-col bg-yellow-900 bg-opacity-10 p-12 space-y-4 border border-solid rounded-2xl hover:border-blue-500 text-xl
+          <motion.div className='w-2/3 flex-col bg-gray-200 p-12 space-y-4 border border-solid rounded-2xl hover:border-blue-500 text-xl
           shadow-md shadow-yellow-950 hover:scale-105' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
             <h1 className='text-4xl font-bold mb-8'>Have one of the following questions? Our app is perfect for you!</h1>
             <ul className='list-disc space-y-4 underline decoration-yellow-700'>
@@ -216,9 +216,9 @@ export default function Home() {
             </ul>
             
           </motion.div>
-          <motion.div className='w-1/3 translate-y-16' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
+          <motion.div className='w-1/3 translate-y-12' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
             <Image
-            className=''
+            className='w-2/3 ml-32'
             src={Question}
             priority={true}
             alt="Questions Image"
@@ -240,36 +240,36 @@ export default function Home() {
             <h1 className='text-4xl text-center font-bold'> Our Services</h1>
             <motion.div className='w-full flex mt-8' variants={fadeInVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
               <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Pet Purchase" header={header1} className="h-full">
-                  <p className="m-0">
+                <Card title="Pet Purchase" header={header1} className="h-full text-center">
+                  <p className="m-0 text-center">
                   Search for a wide variety of animals and purchase them from trusted breeders and licensed sellers.
                   </p>
                 </Card>
               </div>
               <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Animal Adoption" header={header2} className="h-full">
-                  <p className="m-0">
+                <Card title="Animal Adoption" header={header2} className="h-full text-center">
+                  <p className="m-0 text-center">
                   Discover and adopt a wide variety of animals 
                   </p>
                 </Card>
               </div>
               <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Help Lost Animals" header={header3} className="h-full">
-                  <p className="m-0">
+                <Card title="Help Lost Animals" header={header3} className="h-full text-center">
+                  <p className="m-0 text-center">
                   Help reunite lost animals with their owners or find new homes for them
                   </p>
                 </Card>
               </div>
               <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Animal Profiles" header={header4} className="h-full">
-                  <p className="m-0">
+                <Card title="Animal Profiles" header={header4} className="h-full text-center">
+                  <p className="m-0 text-center">
                   Explore detailed profiles of animals, complete with photos and descriptions.
                   </p>
                 </Card>
               </div>
               <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Custommer Support" header={header5} className="h-full">
-                  <p className="m-0">
+                <Card title="Custommer Support" header={header5} className="h-full text-center">
+                  <p className="m-0 text-center">
                   Access our customer support and help resources for a smooth experience.
                   </p>
                 </Card>

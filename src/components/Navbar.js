@@ -106,6 +106,18 @@ export const Navbar = () => {
 		}
 	  }
 
+	function signIn(){
+		axios.get('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/auth')
+		.then(response => {
+			// Handle the response data
+			console.log('Response Data:', response.data);
+		})
+		.catch(error => {
+			// Handle any errors
+			console.error('Error:', error);
+		});
+	}
+
   return (
 
         <nav className="relative p-4 flex justify-between items-center bg-light shadow-xl rounded">
@@ -199,8 +211,9 @@ export const Navbar = () => {
 			</div>
 		) : (
 			<>
-			<a className=" hidden lg:inline-block  lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  rounded-xl transition duration-200" href="https://es-auth.auth.eu-north-1.amazoncognito.com/login?client_id=4vfhkg69f4p5gufq53bpk0llo1&response_type=code&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F">Sign In</a>
+			<button onClick={signIn}><a className=" hidden lg:inline-block  lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-300 hover:bg-gray-100 text-sm text-gray-900 font-bold  rounded-xl transition duration-200">Sign In</a></button>
 			{/* <a className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" href="#">Sign up</a> */}
+			{/* href="https://es-auth.auth.eu-north-1.amazoncognito.com/login?client_id=4vfhkg69f4p5gufq53bpk0llo1&response_type=code&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F" */}
 			</>
 		) 	
 		}
