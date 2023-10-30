@@ -5,6 +5,7 @@ import {Navbar} from '../components/Navbar'
 import { PrimeReactProvider } from 'primereact/api';
 import 'primereact/resources/themes/lara-light-blue/theme.css';
 import { Footer } from '../components/Footer.js';
+import 'primeicons/primeicons.css';
 
 
 const inter = Inter({ subsets: ['latin'] })

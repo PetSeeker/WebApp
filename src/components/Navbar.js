@@ -7,7 +7,7 @@ import {FaUserAlt} from 'react-icons/fa'
 
 export const Navbar = () => {
 
-	const [isAuthenticated, setIsAuthenticated] = useState(true);
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
 	const toggleDropdown = () => {
@@ -51,7 +51,7 @@ export const Navbar = () => {
             />
 		</a>
 		<ul className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-6">
-			<li><a className="text-sm font-bold text-gray-400 hover:text-blue-500" href="#">Home</a></li>
+			<li><a className="text-sm font-bold text-gray-400 hover:text-blue-500" href="/">Home</a></li>
 			<li className="text-gray-300">
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24">
 					<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -105,17 +105,22 @@ export const Navbar = () => {
 				<div className="z-10 absolute mt-2 bg-light w-full border border-solid rounded-xl">
 					<ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDelayButton">
 						<li>
-						<a href="#" className="block px-4 py-2 hover:bg-gray-100" >
+						<a href="#" className="block px-4 py-2 hover:bg-gray-200" >
 							Profile
 						</a>
 						</li>
 						<li>
-						<a href="/myListings" className="block px-4 py-2 hover:bg-gray-100">
+						<a href="/myListings" className="block px-4 py-2 hover:bg-gray-200">
 							My Listings
 						</a>
 						</li>
 						<li>
-						<a href="#" className="block px-4 py-2 hover-bg-gray-10">
+						<a href="/account/settings" className="block px-4 py-2 hover:bg-gray-200">
+							Settings
+						</a>
+						</li>
+						<li>
+						<a href="#" className="block px-4 py-2 hover:bg-gray-200">
 							Sign out
 						</a>
 						</li>
