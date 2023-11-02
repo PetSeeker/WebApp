@@ -1,5 +1,5 @@
 'use client';
-import React from 'react'
+import React, { use } from 'react'
 import Image from 'next/image'
 import PetSeekerlogo from '../../public/images/petSeekerlogo.png'
 import {useState, useEffect, useRef} from 'react'
@@ -11,97 +11,88 @@ export const Navbar = () => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const hasLoggedCode = useRef(false);
-	const [username, setUsername] = useState('');
+	const [username, setUsername] = useState(''); // Initialize with local storage value
 	const [email, setEmail] = useState('');
+	const [token, setToken] = useState('');
 
 	const toggleDropdown = () => {
 		setIsDropdownOpen(!isDropdownOpen);
 	};
-	const [token, setToken] = useState('');
 
 	useEffect(() => {
-		// Get the URLSearchParams from the current URL
-		const searchParams = new URLSearchParams(window.location.search);
-	
-		// Retrieve the 'code' parameter
-		const code = searchParams.get('code');
-	
-		if (code && !hasLoggedCode.current) {
-			console.log(code);
-			// Save the 'code' to your state or perform any actions with it
-			hasLoggedCode.current = true;
-
-			const CLIENT_ID = '4vfhkg69f4p5gufq53bpk0llo1'; // Your actual client ID
-			const CLIENT_SECRET = 'jdspkdchsfjrlv9e3lccf4io2s8h9r6avpc5va58r99lqf5rmr0'; // Your actual client ID
-			const token_data = {
-				"grant_type": 'authorization_code',
-				"client_id": CLIENT_ID,
-				"code": code,
-				"redirect_uri": 'http://localhost:3000/',
-				// "client_secret": 'jdspkdchsfjrlv9e3lccf4io2s8h9r6avpc5va58r99lqf5rmr0'
-			};
-			const clientCredentials = `${CLIENT_ID}:${CLIENT_SECRET}`;
-			const base64Credentials = Buffer.from(clientCredentials).toString('base64');
-			const headers = {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'Authorization': `Basic ${base64Credentials}`,
-			};
-
-			const formData = new URLSearchParams();
-			formData.append('grant_type', token_data.grant_type);
-			formData.append('client_id', token_data.client_id);
-			formData.append('code', token_data.code);
-			formData.append('redirect_uri', token_data.redirect_uri);
-
-			console.log(token_data);
-			axios.post('https://es-auth.auth.eu-north-1.amazoncognito.com/oauth2/token', formData, { headers })
-			.then(response => {
-				console.log('Token request was successful:', response.data);
-				setToken(response.data.access_token);
-				getUserInfo(response.data.access_token);
-				setIsAuthenticated(true);
-			})
-			.catch(error => {
-				console.error('Token request failed:', error);
-			});
-		} else {
-			// If no 'code' is present, check local storage for authentication
+		async function fetchData() {
 			checkLocalStorage();
+			// Get the URLSearchParams from the current URL
+			const searchParams = new URLSearchParams(window.location.search);
+			// Retrieve the 'code' parameter
+			const code = searchParams.get('code');
+
+			if (code && !hasLoggedCode.current && !localStorage.getItem('access_token')) {
+				// Save the 'code' to your state or perform any actions with it
+				hasLoggedCode.current = true;
+	
+				try {
+					const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/token', { code: code });
+	
+					// Handle the response data
+					const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
+					const access_token = responseBody.access_token; // Extract the access_token
+					setToken(access_token);
+					localStorage.setItem('access_token', access_token);
+					getUserInfo(access_token);
+					setIsAuthenticated(true);
+					
+				} catch (error) {
+					// Handle any errors
+					console.error('Error:', error);
+				}
+			}
 		}
+	
+		fetchData();
+	}, []);
 
-	  }, []);
-
-	function getUserInfo(token2){
-		const headers = {
-			'Authorization': `Bearer ${token2}`,
-		  };
-
-		  axios.get('https://es-auth.auth.eu-north-1.amazoncognito.com/oauth2/userInfo', { headers })
-			.then(response => {
-				console.log('User Info Request was successful:', response.data);
-				setUsername(response.data.username);
-				localStorage.setItem('username', response.data.username);
-				localStorage.setItem('email', response.data.email);
-			})
-			.catch(error => {
-				console.error('User Info Request failed:', error);
+	async function getUserInfo(token2) {
+		try {
+			const response = await axios.get('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/userInfo', {
+				params: { access_token: token2 }
 			});
-	}
+			const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
+			const username = responseBody.username; // Extract the username
 
+			// Update the local storage first
+			localStorage.setItem('username', username);
+			localStorage.setItem('email', responseBody.email);
+	
+	
+			// Then update the state
+			setUsername(username);
+			setEmail(responseBody.email);
+		} catch (error) {
+			console.error('User Info Request failed:', error);
+		}
+	}
+	
+	
 	function logout(){
 		localStorage.removeItem('username');
 		localStorage.removeItem('email');
+		localStorage.removeItem('access_token');
+		setUsername(''); // Set the username state to an empty string
+		setEmail(''); // Set the email state to an empty string
 		setIsAuthenticated(false);
 	}
 
 	function checkLocalStorage() {
 		const storedUsername = localStorage.getItem('username');
 		const storedEmail = localStorage.getItem('email');
-	  
-		if (storedUsername && storedEmail) {
+		const storedToken = localStorage.getItem('access_token');
+		console.log(localStorage);
+		if (storedUsername && storedEmail && storedToken) {
 		  // Both username and email are present in local storage
 		  setUsername(storedUsername);
 		  setEmail(storedEmail);
+		  setToken(storedToken);
 		  setIsAuthenticated(true);
 		}
 	  }
@@ -111,6 +102,11 @@ export const Navbar = () => {
 		.then(response => {
 			// Handle the response data
 			console.log('Response Data:', response.data);
+			// Get the redirect URL from the response headers
+			const redirectUrl = response.data.headers.Location;
+			// Redirect to the received URL
+			console.log('Redirecting to:', redirectUrl);
+			window.location.href = redirectUrl;
 		})
 		.catch(error => {
 			// Handle any errors
@@ -223,3 +219,4 @@ export const Navbar = () => {
     
   )
 }
+
