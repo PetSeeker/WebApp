@@ -6,7 +6,7 @@ import { InputText} from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FileUpload } from 'primereact/fileupload';
 
 export default function CreatePub(){
@@ -36,8 +36,24 @@ export default function CreatePub(){
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
 
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
+    useEffect(() => {
+        const token = localStorage.getItem('access_token');
+        if (token && window.location.pathname === '/createPub') {
+          setIsAuthenticated(true);
+        } else if (window.location.pathname !== '/login') {
+            setIsAuthenticated(false);
+        }
+      }, []);
+
     return (
         <>
+        
+        {isAuthenticated === null ? ( // Display nothing or a loading indicator while checking authentication
+        // Loading indicator or placeholder
+        <p>Loading...</p>
+        ) : isAuthenticated ? ( // Content for authenticated users
+            <>
             <AnimatedText text='Create a Publication' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-16 mt-8 '/>
 
             <Layout className='flex items-center justify-center'>
@@ -89,6 +105,12 @@ export default function CreatePub(){
                     </div>
                 </div>
             </Layout>
+        </>
+        ) : ( 
+            <div className='w-full items-center justify-center p-8 border border-solid rounded-xl text-black text-center my-32 bg-sage2'>
+                <p className='text-bold text-5xl'>You are not authenticated. Please log in.</p>
+            </div>
+        )}
         </>
     )
 }

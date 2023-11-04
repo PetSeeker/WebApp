@@ -11,7 +11,7 @@ export const Navbar = () => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const hasLoggedCode = useRef(false);
-	const [username, setUsername] = useState(''); // Initialize with local storage value
+	const [username, setUsername] = useState('');
 	const [email, setEmail] = useState('');
 	const [token, setToken] = useState('');
 
@@ -182,7 +182,7 @@ export const Navbar = () => {
 				<div className="z-10 absolute mt-2 bg-light w-full border border-solid rounded-xl">
 					<ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDelayButton">
 						<li>
-						<a href="#" className="block px-4 py-2 hover:bg-gray-200" >
+						<a href="/account/profile" className="block px-4 py-2 hover:bg-gray-200" >
 							Profile
 						</a>
 						</li>

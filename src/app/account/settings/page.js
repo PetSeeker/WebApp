@@ -2,11 +2,13 @@
 import AnimatedText from '@/components/AnimatedText';
 import Layout from '@/components/Layout';
 import { FaRegBell } from "react-icons/fa";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function AccountSettings(){
     
     const [isToggled, setIsToggled] = useState(false);
+    
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
 
     const handleToggle = () => {
         setIsToggled(!isToggled);
@@ -20,8 +22,24 @@ export default function AccountSettings(){
         console.log("Estado atualizado:", isToggled);
         //chamar api endpoint das nofiticações
     }
+
+    useEffect(() => {
+        const token = localStorage.getItem('access_token');
+        if (token && window.location.pathname === '/account/settings') {
+          setIsAuthenticated(true);
+        } else if (window.location.pathname !== '/login') {
+            setIsAuthenticated(false);
+        }
+      }, []);
+
     
     return(
+        
+        <>
+        {isAuthenticated === null ? ( // Display nothing or a loading indicator while checking authentication
+        // Loading indicator or placeholder
+        <p>Loading...</p>
+        ) : isAuthenticated ? ( // Content for authenticated users
         <>
         <AnimatedText text='Account Settings' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-16 mt-8 '/>
         <Layout className='flex items-center justify-center'>
@@ -68,6 +86,12 @@ export default function AccountSettings(){
                 </div>
             </div>
         </Layout>
+        </>
+        ) : ( 
+            <div className='w-full items-center justify-center p-8 border border-solid rounded-xl text-black text-center my-32 bg-sage2'>
+                <p className='text-bold text-5xl'>You are not authenticated. Please log in.</p>
+            </div>
+        )}
         </>
     )
 
