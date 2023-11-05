@@ -197,7 +197,7 @@ export const Navbar = () => {
 						</a>
 						</li>
 						<li>
-						<a href="https://es-auth.auth.eu-north-1.amazoncognito.com/login?client_id=4vfhkg69f4p5gufq53bpk0llo1&response_type=code&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F" className="block px-4 py-2 hover:bg-gray-200" onClick={logout}>
+						<a href="https://es-auth.auth.eu-north-1.amazoncognito.com/login?client_id=4vfhkg69f4p5gufq53bpk0llo1&response_type=code&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fmain.d1nvseuq3obuqm.amplifyapp.com%2F" className="block px-4 py-2 hover:bg-gray-200" onClick={logout}>
 							Sign out
 						</a>
 						</li>
