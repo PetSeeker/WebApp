@@ -46,6 +46,8 @@ export default function CreatePub(){
         }
       }, []);
 
+    //   const [isAuthenticated, setIsAuthenticated] = useState(true); //for local development
+
     return (
         <>
         
@@ -60,7 +62,7 @@ export default function CreatePub(){
                 <div className='w-1/3 bg-gray-300 bg-opacity-50 border border-solid rounded-xl flex flex-col items-center justify-center p-8 space-y-8'>
                     <div className='w-full flex'>
                         <div className="p-float-label w-1/2">
-                            <InputText id="username" value={name} onChange={(e) => setName(e.target.value)} />
+                            <InputText id="username" value={name} onChange={(e) => setName(e.target.value)}  />
                             <label htmlFor="username">Animal Name</label>
                         </div>
                         <div className="p-float-label w-1/2">
@@ -70,11 +72,11 @@ export default function CreatePub(){
                     </div>
                     <div className='w-full flex'>
                         <div className="p-float-label w-1/2">
-                            <InputText id="username" value={breed} onChange={(e) => setBreed(e.target.value)} className='h-2/3'/>
+                            <InputText id="username" value={breed} onChange={(e) => setBreed(e.target.value)} className='h-full'/>
                             <label htmlFor="username">Breed</label>
                         </div>
                         <div className="p-float-label w-1/2">
-                            <InputNumber id="number-input" value={age} onValueChange={(e) => setAge(e.value)} className='w-full' />
+                            <input type="number" id="number-input" value={age} onChange={(e) => setAge(e.target.value)} class="w-full" />
                             <label htmlFor="number-input">Age</label>
                         </div>
                     </div>
@@ -85,18 +87,18 @@ export default function CreatePub(){
                         </div> */}
                         <div className='w-1/2'>
                             <Dropdown value={selectedGoal} onChange={(e) => setSelectedGoal(e.value)} options={goals} optionLabel="name" 
-                            placeholder="Sale/Adoption" className='h-2/3'/>
+                            placeholder="Sale/Adoption" className='h-full'/>
                         </div>
                         { selectedGoal === 'sale' ? (
                             <div className="p-float-label w-1/2">
-                                <InputNumber id="number-input" value={price} onValueChange={(e) => setPrice(e.value)} />
+                                <input type="number" id="number-input" value={price} onChange={(e) => setPrice(e.target.value)} />
                                 <label htmlFor="number-input">Price</label>
                             </div> ) : <></>
                         }
                     </div>
                     <div className='w-full flex'>
-                        <div className="p-float-label w-full">
-                            <InputTextarea id="username" value={description} onChange={(e) => setDescription(e.target.value)} rows={5} cols={30} className='w-full rounded-xl'/>
+                        <div className="p-float-label w-full ">
+                            <InputTextarea id="username" value={description} onChange={(e) => setDescription(e.target.value)} rows={5} cols={30} className='w-full rounded-xl min-h-full'/>
                             <label htmlFor="username">Description</label>
                         </div>
                     </div>
