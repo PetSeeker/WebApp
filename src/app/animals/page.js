@@ -2,6 +2,7 @@
 import Layout from '@/components/Layout';
 import { FaMoneyBill, FaHandHoldingHeart } from "react-icons/fa";
 import {useEffect } from 'react';
+import axios from 'axios';
 
 export default function Animals() {
 
