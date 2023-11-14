@@ -34,3 +34,36 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+
+#set($owner_email = $input.params().form.get('owner_email'))
+#set($animal_type = $input.params().form.get('animal_type'))
+#set($animal_breed = $input.params().form.get('animal_breed'))
+#set($animal_age = $input.params().form.get('animal_age'))
+#set($listing_type = $input.params().form.get('listing_type'))
+#set($animal_price = $input.params().form.get('animal_price'))
+#set($description = $input.params().form.get('description'))
+#set($images = $input.params().form.get('images'))
+{
+    "owner_email": "$owner_email",
+    "animal_type": "$animal_type",
+    "animal_breed": "$animal_breed",
+    "animal_age": $animal_age,
+    "listing_type": "$listing_type",
+    #if($animal_price.matches("\\d+"))
+        "animal_price": $animal_price
+    #else
+        "animal_price": "$animal_price"
+    #end,
+    "description": "$description",
+    #if($images.size() > 0)
+        "images": $images
+    #else
+        "images": []
+    #end
+}
+
+
+# Make a POST request to the Cognito token endpoint
+        response = requests.post(ENDPOINT, data=data)

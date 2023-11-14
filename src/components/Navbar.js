@@ -33,7 +33,6 @@ export const Navbar = () => {
 	
 				try {
 					const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/token', { code: code });
-	
 					// Handle the response data
 					const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
 					const access_token = responseBody.access_token; // Extract the access_token
@@ -63,7 +62,7 @@ export const Navbar = () => {
 			// Update the local storage first
 			localStorage.setItem('username', username);
 			localStorage.setItem('email', responseBody.email);
-	
+			sendNot(responseBody.email)
 	
 			// Then update the state
 			setUsername(username);
@@ -113,6 +112,35 @@ export const Navbar = () => {
 			console.error('Error:', error);
 		});
 	}
+
+	async function sendNot(email3) {
+		try {
+		  console.log("email3: ", email3);
+		  const requestData2 = {
+			to: email3,
+			subject: "Loginsss successful",
+			message: "You have successfully logged in to PetSeeker",
+		  };
+	  
+		  console.log("email para enviar:", requestData2.to);
+		  console.log("subject para enviar:", requestData2.subject);
+		  console.log("message para enviar:", requestData2.message);
+	  
+		  const response = await axios.post(
+			'https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/notification',
+			requestData2
+		  );
+	  
+		  // Handle the response data
+		  console.log('API Response:', response.data);
+		  // const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
+	  
+		} catch (error) {
+		  // Handle any errors
+		  console.error('Error:', error);
+		}
+	  }
+	  
 
   return (
 

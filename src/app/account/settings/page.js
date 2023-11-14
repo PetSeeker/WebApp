@@ -3,30 +3,61 @@ import AnimatedText from '@/components/AnimatedText';
 import Layout from '@/components/Layout';
 import { FaRegBell } from "react-icons/fa";
 import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import { request } from 'http';
 
 export default function AccountSettings(){
     
     const [isToggled, setIsToggled] = useState(false);
-    
     const [isAuthenticated, setIsAuthenticated] = useState(null);
-
+    const [email, setEmail] = useState('');
+    const [notification_preference, setNotification_preference] = useState('0');
     const handleToggle = () => {
         setIsToggled(!isToggled);
     };
 
-    // useEffect(() => {
-    //     console.log("Estado atualizado:", isToggled);
-    // }, [isToggled]);
-
-    function handleApply(){
+    const handleApply = async () => {
         console.log("Estado atualizado:", isToggled);
-        //chamar api endpoint das nofiticações
-    }
+
+        // Define requestData before the try block
+        const requestData = {
+            email: "",
+            notification_preference: "",
+        };
+    
+        try {
+            const notificationPreferenceValue = isToggled ? '1' : '0';  
+    
+            // Update state and wait for it to be completed
+            await new Promise(resolve => {
+                setNotification_preference(prevNotification => {
+                    requestData.email = email;
+                    requestData.notification_preference = notificationPreferenceValue;
+    
+                    // Resolve the promise to indicate that state update is complete
+                    resolve();
+                    
+                    return notificationPreferenceValue; // Update state with the latest value
+                });
+            });
+    
+            // Now, requestData should be updated
+            console.log("email para enviar:", requestData.email);
+            console.log("notification_preference para enviar:", requestData.notification_preference);
+    
+            // Proceed with your API call
+            const response = await axios.put('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/update-notifications', requestData);
+            console.log('Resposta:', response);
+        } catch (error) {
+            console.error('Erro a ativar/desativar notificações', error);
+        }
+    };
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
+        setEmail(localStorage.getItem('email'));
         if (token && window.location.pathname === '/account/settings') {
-          setIsAuthenticated(true);
+            setIsAuthenticated(true);
         } else if (window.location.pathname !== '/login') {
             setIsAuthenticated(false);
         }

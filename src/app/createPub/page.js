@@ -8,24 +8,23 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
 import { useState, useEffect } from 'react';
 import { FileUpload } from 'primereact/fileupload';
+import axios from 'axios';
 
 export default function CreatePub(){
 
     const [name, setName] = useState('');
     const [type, setType] = useState('');
     const [breed, setBreed] = useState('');
-    const [age, setAge] = useState('');
+    const [age, setAge] = useState(0); // or useState(null);
     const [location, setLocation] = useState('');
-    // const [selectedSize, setSelectedSize] = useState(null);
-    // // Initialize the sizes array with data. Replace this with your actual data.
-    // const sizes = [
-    //     { name: 'Select a Size', value: null },
-    //     { name: 'Small', value: 'small' },
-    //     { name: 'Medium', value: 'medium' },
-    //     { name: 'Big', value: 'big' },
-    //     // Add more Size objects as needed.
-    // ];
+    const [price, setPrice] = useState(0);;
+    const [description, setDescription] = useState('');
     const [selectedGoal, setSelectedGoal] = useState(null);
+    const [images, setImages] = useState([]);
+    const handleFileUpload = (event) => {
+        const selectedFiles = event.files;
+        setImages(selectedFiles);
+      };
     // Initialize the sizes array with data. Replace this with your actual data.
     const goals = [
         { name: 'Sale or Adoption', value: null },
@@ -34,8 +33,7 @@ export default function CreatePub(){
         // Add more Size objects as needed.
     ];
 
-    const [price, setPrice] = useState('');
-    const [description, setDescription] = useState('');
+    
 
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     useEffect(() => {
@@ -48,6 +46,61 @@ export default function CreatePub(){
       }, []);
 
     //   const [isAuthenticated, setIsAuthenticated] = useState(true); //for local development
+
+    const sendData = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('owner_email', 'example@example.com'); // Replace with actual owner email
+            // formData.append('animal_name', name);
+            console.log("type: ", type)
+            formData.append('animal_type', type);
+            formData.append('animal_breed', breed);
+            formData.append('animal_age', age);
+            // formData.append('location', location);
+            formData.append('listing_type', selectedGoal);
+            formData.append('description', description);
+
+            
+            // Append price only if the listing type is 'sale'
+            if (selectedGoal === 'sale') {
+                formData.append('animal_price', price);
+            }
+
+            console.log("images_length: ", images.length)
+            console.log("images: ", images)  
+            
+            const imageDetails = images.map(file => ({
+                name: file.name,
+                size: file.size,
+                type: file.type,
+            }));
+            
+            console.log("Image Details:", imageDetails);
+            
+            // formData.append('images', images);
+            // // Add images to formData
+            // for (let i = 0; i < images.length; i++) {
+            //     formData.append(`images[${i}]`, images[i]);
+            // }
+            const formDataObject = {};
+            formData.forEach((value, key) => {
+            formDataObject[key] = value;
+            });
+            console.log("Form Data: ", formDataObject)
+
+
+            
+            
+            // Make the API call
+            const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/createListings',formData);
+        
+            // Handle the response as needed
+            console.log('API Response:', response.data);
+        } catch (error) {
+            // Handle errors
+            console.error('API Error:', error.response || error.message || error);
+        }
+      };
 
     return (
         <>
@@ -77,7 +130,7 @@ export default function CreatePub(){
                             <label htmlFor="username">Breed</label>
                         </div>
                         <div className="p-float-label w-1/2">
-                            <input type="number" id="number-input" value={age} onChange={(e) => setAge(e.target.value)} class="w-full h-10 rounded-md border-none" />
+                            <input type="number" id="number-input" value={age} onChange={(e) => setAge(e.target.value)} className="w-full h-10 rounded-md border-none" />
                             <label htmlFor="number-input">Age</label>
                         </div>
                     </div>
@@ -110,10 +163,10 @@ export default function CreatePub(){
                         </div>
                     </div>
                     <div className='w-full'>
-                        <FileUpload name="demo[]" url={'/api/upload'} multiple accept="image/*" maxFileSize={1000000} emptyTemplate={<p className="w-full m-0">Drag and drop images to here to upload.</p>} />
+                        <FileUpload name="images" url={'/api/upload'} multiple accept="image/*" maxFileSize={1000000} onSelect={handleFileUpload} emptyTemplate={<p className="w-full m-0">Drag and drop images to here to upload.</p>} />
                     </div>
                     <div className='w-full flex items-center justify-center'>
-                        <Button label="Submit" icon="pi pi-check" className='p-3 bg-blue-500 text-white hover:bg-white hover:text-blue-500' text raised/>
+                        <Button label="Submit" icon="pi pi-check" className='p-3 bg-blue-500 text-white hover:bg-white hover:text-blue-500' text raised onClick={sendData}/>
                     </div>
                 </div>
             </Layout>
