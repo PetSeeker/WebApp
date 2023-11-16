@@ -6,22 +6,7 @@ import axios from 'axios';
 
 export default function Animals() {
 
-    useEffect(() => {
-        // Define the API endpoint
-        const apiUrl =
-          'https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/getListings?listing_type=SALE';
     
-        // Make the API call using Axios
-        axios
-          .get(apiUrl)
-          .then((response) => {
-            // Set the data in the state
-            console.log(response.data)
-          })
-          .catch((error) => {
-            console.error('Error fetching data:', error.message);
-          });
-      }, []); // The empty dependency array ensures that the effect runs once after the initial render
 
   return (
     <>

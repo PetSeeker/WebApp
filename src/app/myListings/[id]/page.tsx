@@ -1,32 +1,46 @@
 "use client";
-import Image from 'next/image'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import AnimatedText from '@/components/AnimatedText';
 import Layout from '@/components/Layout';
 import { InputText} from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
-import { useState, useEffect } from 'react';
 import { FileUpload } from 'primereact/fileupload';
 import { InputNumber } from 'primereact/inputnumber';
-import axios from 'axios';
 
-export default function CreatePub(){
+export default function SaleID({params}: {params: {id: string}}){
+
+
+    const [listing, setListing] = useState({
+        animal_age: '',
+        animal_breed: '',
+        animal_name: '',
+        animal_price: null,
+        animal_type: '',
+        description: '',
+        images: [],
+        listing_id: '',
+        listing_type: '',
+        location: '',
+        owner_email: '',
+      });
 
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [type, setType] = useState('');
     const [breed, setBreed] = useState('');
-    const [age, setAge] = useState(null); // or useState(null);
+    const [age, setAge] = useState<number | null>(null);
     const [location, setLocation] = useState('');
-    const [price, setPrice] = useState(0);
+    const [price, setPrice] = useState<number | null>(null);
     const [description, setDescription] = useState('');
     const [selectedGoal, setSelectedGoal] = useState(null);
     const [images, setImages] = useState([]);
-    const handleFileUpload = (event) => {
+    const handleFileUpload = (event: { files: any; }) => {
         const selectedFiles = event.files;
         setImages(selectedFiles);
-      };
+    };
     // Initialize the sizes array with data. Replace this with your actual data.
     const goals = [
         { name: 'Sale or Adoption', value: null },
@@ -34,8 +48,6 @@ export default function CreatePub(){
         { name: 'ADOPTION', value: 'ADOPTION'},
         // Add more Size objects as needed.
     ];
-
-    
 
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     useEffect(() => {
@@ -48,7 +60,35 @@ export default function CreatePub(){
         }
       }, []);
 
-    //   const [isAuthenticated, setIsAuthenticated] = useState(true); //for local development
+    useEffect(() => {
+        // Define the API endpoint
+        const apiUrl =
+          `https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/getListingsID?listing_id=${params.id}`;
+    
+        // Make the API call using Axios
+        axios
+          .get(apiUrl)
+            .then((response) => {
+                // Set the data in the state
+                const body = JSON.parse(response.data.body);
+                console.log(body.listing);
+                setListing(body.listing);
+                // Set the state variables with the corresponding listing properties only if they are not already set
+                setName((prevName) => prevName || body.listing.animal_name);
+                setType((prevType) => prevType || body.listing.animal_type);
+                setBreed((prevBreed) => prevBreed || body.listing.animal_breed);
+                setAge((prevAge) => prevAge !== null ? prevAge : body.listing.animal_age);
+                setLocation((prevLocation) => prevLocation || body.listing.location);
+                setSelectedGoal((prevSelectedGoal) => prevSelectedGoal || body.listing.listing_type);
+                setPrice((prevPrice) => prevPrice !== null ? prevPrice : body.listing.animal_price);
+                setDescription((prevDescription) => prevDescription || body.listing.description);
+                // ... set other state variables
+                
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error.message);
+            });
+        }, []); // The empty dependency array ensures that the effect runs once after the initial render
 
     const sendData = async () => {
         try {
@@ -85,58 +125,38 @@ export default function CreatePub(){
             
             try {
                 // Make the API call using axios
-                const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/createListings', formData, {
-                  headers: {
+                const response = await axios.put(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/editListings/${params.id}`, formData, {
+                    headers: {
                     'Content-Type': 'multipart/form-data',
                     'Accept': '*/*',
-                  }
+                    }
                 });
-          
+            
                 // Handle the response
                 console.log('API Response:', response.data);
-                sendNot();
-              } catch (error) {
+                } catch (error) {
                 // Handle errors
                 console.error('Error making API call:', error);
-              }
+                }
+            window.location.href = '/myListings';
         } catch (error) {
             // Handle errors
             console.error('API Error:', error.response || error.message || error);
         }
-      };
-
-      async function sendNot(){
-            const data = {
-                "to": email,
-                "subject": "Publication Created",
-                "message": "Your publication has been created"
-            }
-            console.log("email: ", email)
-            try {
-                // Make the API call using axios
-                const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/notification', data);
-          
-                // Handle the response
-                console.log('API Response:', response.data);
-                window.location.href = '/myListings';
-              } catch (error) {
-                // Handle errors
-                console.error('Error making API call:', error);
-              }
-        }
+        };
+        
 
     return (
         <>
-        
-        {isAuthenticated === null ? ( // Display nothing or a loading indicator while checking authentication
+        {listing.animal_name === '' ? (
         // Loading indicator or placeholder
         <p>Loading...</p>
-        ) : isAuthenticated ? ( // Content for authenticated users
-            <>
-            <AnimatedText text='Create a Publication' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-12 mt-8 '/>
-
-            <Layout className='flex items-center justify-center'>
-                <div className='w-1/3 bg-gray-300 bg-opacity-50 border border-solid rounded-xl flex flex-col items-center justify-center p-8 space-y-6 shadow-lg'>
+        ) : (
+        <>
+            <AnimatedText text={listing.animal_name} className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-4 mt-8 '/>
+            <Layout className='flex items-center justify-center flex-col'>
+            <h1 className='text-center underline'>Change what you want about your publication</h1>
+            <div className='w-1/3 bg-gray-300 bg-opacity-50 border border-solid rounded-xl flex flex-col items-center justify-center p-8 space-y-6 shadow-lg'>
                     <div className='w-full flex'>
                         <div className="p-float-label w-1/2">
                             <InputText id="username" value={name} onChange={(e) => setName(e.target.value)} className='h-10'  />
@@ -174,7 +194,7 @@ export default function CreatePub(){
                         </div>
                         { selectedGoal === 'SALE' ? (
                             <div className="p-float-label w-1/2">
-                                <input type="number" id="number-input" value={price} onChange={(e) => setPrice(e.target.value)} />
+                                <InputNumber id="number-input" value={price} onChange={(e) => setPrice(e.value)} />
                                 <label htmlFor="number-input">Price</label>
                             </div> ) : <></>
                         }
@@ -189,16 +209,12 @@ export default function CreatePub(){
                         <FileUpload name="images" url={'/api/upload'} multiple accept="image/*" maxFileSize={1000000} onSelect={handleFileUpload} emptyTemplate={<p className="w-full m-0">Drag and drop images to here to upload.</p>} />
                     </div>
                     <div className='w-full flex items-center justify-center'>
-                        <Button label="Create Listing" icon="pi pi-check" className='p-3 bg-blue-500 text-white hover:bg-white hover:text-blue-500' text raised onClick={sendData}/>
+                        <Button label="Edit Listing" icon="pi pi-check" className='p-3 bg-blue-500 text-white hover:bg-white hover:text-blue-500' text raised onClick={sendData} />
                     </div>
                 </div>
             </Layout>
         </>
-        ) : ( 
-            <div className='w-full items-center justify-center p-8 border border-solid rounded-xl text-black text-center my-32 bg-sage2'>
-                <p className='text-bold text-5xl'>You are not authenticated. Please log in.</p>
-            </div>
-        )}
+        )}       
         </>
     )
 }

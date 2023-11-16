@@ -117,17 +117,11 @@ export const Navbar = () => {
 		try {
 		  console.log("email3: ", email3);
 		  const requestData2 = {
-			to: email3,
-			subject: "Loginsss successful",
-			message: "You have successfully logged in to PetSeeker",
+			email: email3,
 		  };
 	  
-		  console.log("email para enviar:", requestData2.to);
-		  console.log("subject para enviar:", requestData2.subject);
-		  console.log("message para enviar:", requestData2.message);
-	  
 		  const response = await axios.post(
-			'https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/notification',
+			'https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/verify-and-add-email',
 			requestData2
 		  );
 	  
