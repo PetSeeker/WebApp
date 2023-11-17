@@ -49,7 +49,7 @@ export const Navbar = () => {
 		}
 	
 		fetchData();
-	}, []);
+	}, [getUserInfo]);
 
 	async function getUserInfo(token2) {
 		try {

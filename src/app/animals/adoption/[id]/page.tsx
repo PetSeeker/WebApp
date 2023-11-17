@@ -9,6 +9,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
+import Image from 'next/image';
 
 
 export default function AdoptionID({params}: {params: {id: string}}){
@@ -87,7 +88,13 @@ export default function AdoptionID({params}: {params: {id: string}}){
                     <Slider {...settings} className="hover:scale-105">
                     {listing.images.map((image: string, index: number) => (
                         <div key={index} className='bg-white border-4 border-gray-500 rounded-xl'>
-                        <img className='w-full h-96 object-cover' src={image} alt={`${listing.animal_name} Image ${index + 1}`} />
+                        <Image
+                        className='w-full h-96 object-cover'
+                        src={image}
+                        alt={`${listing.animal_name} Image ${index + 1}`}
+                        width={500}
+                        height={500}
+                        />
                         </div>
                     ))}
                     </Slider>

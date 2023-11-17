@@ -73,7 +73,13 @@ export default function Sale(){
                             <h1 className='text-3xl my-2 font-bold text-center'>{listing.animal_name}</h1>
                             {listing.images.length > 0 ? (
                                 <div className='w-full h-60 items-center justify-center text-center  border-2 border-white'>
-                                    <img src={listing.images[0]} alt={"Animal Image"} className='w-full h-full object-cover'/>
+                                    <Image
+                                    className='w-full h-full object-cover'
+                                    src={listing.images[0]}
+                                    alt={'Animal Image'}
+                                    width={500}
+                                    height={500}
+                                    />
                                 </div>
                             ) : (
                                 <div className='w-full h-60 bg-gray-300 flex items-center justify-center'>
