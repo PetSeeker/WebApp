@@ -20,6 +20,28 @@ export const Navbar = () => {
 	};
 
 	useEffect(() => {
+
+		async function getUserInfo(token2) {
+			try {
+				const response = await axios.get('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/userInfo', {
+					params: { access_token: token2 }
+				});
+				const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
+				const username = responseBody.username; // Extract the username
+	
+				// Update the local storage first
+				localStorage.setItem('username', username);
+				localStorage.setItem('email', responseBody.email);
+				sendNot(responseBody.email)
+		
+				// Then update the state
+				setUsername(username);
+				setEmail(responseBody.email);
+			} catch (error) {
+				console.error('User Info Request failed:', error);
+			}
+		}
+
 		async function fetchData() {
 			checkLocalStorage();
 			// Get the URLSearchParams from the current URL
@@ -49,28 +71,9 @@ export const Navbar = () => {
 		}
 	
 		fetchData();
-	}, [getUserInfo]);
+	}, []);
 
-	async function getUserInfo(token2) {
-		try {
-			const response = await axios.get('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/userInfo', {
-				params: { access_token: token2 }
-			});
-			const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
-			const username = responseBody.username; // Extract the username
-
-			// Update the local storage first
-			localStorage.setItem('username', username);
-			localStorage.setItem('email', responseBody.email);
-			sendNot(responseBody.email)
 	
-			// Then update the state
-			setUsername(username);
-			setEmail(responseBody.email);
-		} catch (error) {
-			console.error('User Info Request failed:', error);
-		}
-	}
 	
 	
 	function logout(){

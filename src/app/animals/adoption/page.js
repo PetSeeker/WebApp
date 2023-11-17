@@ -4,6 +4,7 @@ import AnimatedText from '@/components/AnimatedText';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Accordion, AccordionTab } from 'primereact/accordion';
+import Image from 'next/image';
 
 export default function Adoption(){
 
