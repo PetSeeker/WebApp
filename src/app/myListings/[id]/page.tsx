@@ -28,13 +28,13 @@ export default function SaleID({params}: {params: {id: string}}){
       });
 
     const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
-    const [type, setType] = useState('');
-    const [breed, setBreed] = useState('');
+    const [name, setName] = useState<string | null>(null);
+    const [type, setType] = useState<string | null>(null);
+    const [breed, setBreed] = useState<string | null>(null);
     const [age, setAge] = useState<number | null>(null);
-    const [location, setLocation] = useState('');
+    const [location, setLocation] = useState<string | null>(null);
+    const [description, setDescription] = useState<string | null>(null);
     const [price, setPrice] = useState<number | null>(null);
-    const [description, setDescription] = useState('');
     const [selectedGoal, setSelectedGoal] = useState(null);
     const [images, setImages] = useState([]);
     const handleFileUpload = (event: { files: any; }) => {
@@ -74,11 +74,11 @@ export default function SaleID({params}: {params: {id: string}}){
                 console.log(body.listing);
                 setListing(body.listing);
                 // Set the state variables with the corresponding listing properties only if they are not already set
-                setName((prevName) => prevName || body.listing.animal_name);
-                setType((prevType) => prevType || body.listing.animal_type);
-                setBreed((prevBreed) => prevBreed || body.listing.animal_breed);
+                setName((prevName) => prevName || body.listing.animal_name || null);
+                setType((prevType) => prevType || body.listing.animal_type || null);
+                setBreed((prevBreed) => prevBreed || body.listing.animal_breed || null);
                 setAge((prevAge) => prevAge !== null ? prevAge : parseInt(body.listing.animal_age, 10));
-                setLocation((prevLocation) => prevLocation || body.listing.location);
+                setLocation((prevLocation) => prevLocation || body.listing.location || null);
                 setSelectedGoal((prevSelectedGoal) => prevSelectedGoal || body.listing.listing_type);
                 if(body.listing.animal_price === null){
                     console.log("AQUIIIIIII")
@@ -87,7 +87,7 @@ export default function SaleID({params}: {params: {id: string}}){
                     console.log("AQUI É PARA VENDA---")
                 }
                 
-                setDescription((prevDescription) => prevDescription || body.listing.description);
+                setDescription((prevDescription) => prevDescription || body.listing.description || null);
                 // ... set other state variables
                 
             })
