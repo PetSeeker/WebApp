@@ -116,26 +116,53 @@ export default function MyListings(){
         }
       }, [email]); // The empty dependency array ensures that the effect runs once after the initial render
 
-      const handleDeleteClick = (listingId) => {
+      const handleDeleteClick = (listingId, animalName) => {
         const confirmed = window.confirm('Are you sure you want to delete the publication?');
         
         if (confirmed) {
-          // Perform the deletion logic here
-          console.log('Delete confirmed for listing_id:', listingId);
-        //   axios.delete('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/deleteListings', { listing_id:  })
-        //     .then((response) => {
-        //         // Handle the response
-        //         console.log('API response:', response.data);
-        //     })
-        //     .catch((error) => {
-        //         // Handle errors
-        //         console.error('API Error:', error.response || error.message || error);
-        //     });
-        // } else {
-        //   // Do nothing or handle cancellation
-        //   console.log('Delete cancelled.');
+            // Perform the deletion logic here
+            console.log('Delete confirmed for listing_id:', listingId);
+            axios.delete('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/deleteListings', {
+                data: { listing_id: listingId },
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then((response) => {
+                // Handle the response
+                console.log('API response:', response.data);
+                window.location.reload();
+                sendNot(animalName);
+            })
+            .catch((error) => {
+                // Handle errors
+                console.error('API Error:', error.response || error.message || error);
+            });
+        } else {
+          // Do nothing or handle cancellation
+          console.log('Delete cancelled.');
         }
       };
+
+      async function sendNot(animal){
+        const data = {
+            "to": email,
+            "subject": "Publication Deleted",
+            "message": `Your publication of animal: ${animal}, has been Edited`
+        }
+        console.log("email: ", email)
+        try {
+            // Make the API call using axios
+            const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/notification', data);
+      
+            // Handle the response
+            console.log('API Response Nots:', response.data);
+            window.location.href = '/myListings';
+          } catch (error) {
+            // Handle errors
+            console.error('Error making API call:', error);
+          }
+    }
     
     return(
         <>
@@ -165,7 +192,7 @@ export default function MyListings(){
                         '>  
                             <div className='flex justify-between'>
                                     <button className='bg-gray-500 text-white px-4 rounded-md
-                                    hover:bg-gray-300 hover:text-black hover:border-2 hover:border-black' onClick={() => handleDeleteClick(listing.listing_id)}>X</button>
+                                    hover:bg-gray-300 hover:text-black hover:border-2 hover:border-black' onClick={() => handleDeleteClick(listing.listing_id, listing.animal_name)}>X</button>
                                     <a href={`/myListings/${listing.listing_id}`}><button className='bg-gray-500 text-white p-1 rounded-md
                                     hover:bg-gray-300 hover:text-black hover:border-2 hover:border-black
                                     '>Edit Publication</button></a>

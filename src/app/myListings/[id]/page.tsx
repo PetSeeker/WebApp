@@ -140,7 +140,7 @@ export default function SaleID({params}: {params: {id: string}}){
             
                 // Handle the response
                 console.log('API Response:', response.data);
-                sendNot();
+                sendNot(name);
                 } catch (error) {
                 // Handle errors
                 console.error('Error making API call:', error);
@@ -152,11 +152,11 @@ export default function SaleID({params}: {params: {id: string}}){
         }
         };
         
-        async function sendNot(){
+        async function sendNot(name: string){
             const data = {
                 "to": email,
                 "subject": "Publication Edited",
-                "message": "Your publication has been Edited"
+                "message": `Your publication of animal: ${name} has been Edited`
             }
             console.log("email: ", email)
             try {

@@ -94,7 +94,7 @@ export default function CreatePub(){
           
                 // Handle the response
                 console.log('API Response:', response.data);
-                sendNot();
+                sendNot(name);
               } catch (error) {
                 // Handle errors
                 console.error('Error making API call:', error);
@@ -105,11 +105,11 @@ export default function CreatePub(){
         }
       };
 
-      async function sendNot(){
+      async function sendNot(name){
             const data = {
                 "to": email,
                 "subject": "Publication Created",
-                "message": "Your publication has been created"
+                "message": `Your publication of animal: ${name} has been created`
             }
             console.log("email: ", email)
             try {
