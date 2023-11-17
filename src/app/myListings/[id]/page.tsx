@@ -76,12 +76,13 @@ export default function SaleID({params}: {params: {id: string}}){
                 
                 // Set the state variables with the corresponding listing properties
                 // only if they are not already set
-                setName((prevName) => (prevName !== null ? prevName : body.listing.animal_name || ''));
-                setType((prevType) => (prevType !== null ? prevType : body.listing.animal_type || ''));
-                setBreed((prevBreed) => (prevBreed !== null ? prevBreed : body.listing.animal_breed || ''));
-                setAge((prevAge) => (prevAge !== null ? prevAge : parseInt(body.listing.animal_age, 10) || null));
-                setLocation((prevLocation) => (prevLocation !== null ? prevLocation : body.listing.location || ''));
-                setSelectedGoal((prevSelectedGoal) => prevSelectedGoal || body.listing.listing_type);
+                setName(body.listing.animal_name || '');
+                setType(body.listing.animal_type || '');
+                setBreed(body.listing.animal_breed || '');
+                setAge(parseInt(body.listing.animal_age, 10) || null);
+                setLocation(body.listing.location || '');
+                setSelectedGoal(body.listing.listing_type || '');
+                
     
                 if (body.listing.animal_price === null) {
                     console.log("AQUIIIIIII")
@@ -90,7 +91,7 @@ export default function SaleID({params}: {params: {id: string}}){
                     console.log("AQUI É PARA VENDA---")
                 }
     
-                setDescription((prevDescription) => (prevDescription !== null ? prevDescription : body.listing.description || ''));
+                setDescription(body.listing.description || '');
                 // ... set other state variables
             })
             .catch((error) => {
@@ -118,10 +119,11 @@ export default function SaleID({params}: {params: {id: string}}){
                 formData.append('images', image, `image${index}`);
             });
             
-            // Append price only if the listing type is 'sale'
+            // Append price only if the liting type is 'sale'
             if (selectedGoal === 'SALE' && price !== null) {
                 formData.append('animal_price', price.toString());
             }
+            console.log(name)
             
 
 
@@ -138,7 +140,7 @@ export default function SaleID({params}: {params: {id: string}}){
             
                 // Handle the response
                 console.log('API Response:', response.data);
-                // sendNot();
+                sendNot();
                 } catch (error) {
                 // Handle errors
                 console.error('Error making API call:', error);
@@ -163,16 +165,18 @@ export default function SaleID({params}: {params: {id: string}}){
           
                 // Handle the response
                 console.log('API Response Nots:', response.data);
-                // window.location.href = '/myListings';
+                window.location.href = '/myListings';
               } catch (error) {
                 // Handle errors
                 console.error('Error making API call:', error);
               }
         }
 
+        
+
     return (
         <>
-        {listing.animal_name === '' ? (
+        {name === '' ? (
         // Loading indicator or placeholder
         <p>Loading...</p>
         ) : (
