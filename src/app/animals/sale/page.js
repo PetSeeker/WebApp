@@ -66,8 +66,8 @@ export default function Sale(){
             <Layout className='flex items-center justify-center'>
                 <div className='w-full grid gap-4 p-8 md:grid-cols-2 lg:grid-cols-3 xs:grid-cols-1 justify-center items-center'>
                 {listings.map((listing, index) => (
-                    <a href={`/animals/sale/${listing.listing_id}`}>
-                        <div key={index} className='max-w-sm flex flex-col bg-gray-300 shadow-md border-1 border-solid rounded-xl
+                    <a key={index} href={`/animals/sale/${listing.listing_id}`}>
+                        <div className='max-w-sm flex flex-col bg-gray-300 shadow-md border-1 border-solid rounded-xl
                         hover:scale-105
                         '>  
                             <h1 className='text-3xl my-2 font-bold text-center'>{listing.animal_name}</h1>

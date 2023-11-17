@@ -94,7 +94,7 @@ export default function SaleID({params}: {params: {id: string}}){
             .catch((error) => {
                 console.error('Error fetching data:', error.message);
             });
-        }, []); // The empty dependency array ensures that the effect runs once after the initial render
+        }, [params.id]); // The empty dependency array ensures that the effect runs once after the initial render
 
     const sendData = async () => {
         try {
