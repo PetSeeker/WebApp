@@ -69,7 +69,7 @@ export default function Adoption(){
                 {listings.map((listing, index) => (
                     <a key={index} href={`/animals/adoption/${listing.listing_id}`}>
                         <div  className='max-w-sm flex flex-col bg-gray-300 shadow-md border-1 border-solid rounded-xl
-                        hover:scale-105
+                        hover:scale-105 hover:border-2 hover:border-gray-500 transition duration-300 ease-in-out
                         '>  
                             <h1 className='text-3xl my-2 font-bold text-center'>{listing.animal_name}</h1>
                             {listing.images.length > 0 ? (

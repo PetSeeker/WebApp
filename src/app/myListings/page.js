@@ -161,7 +161,7 @@ export default function MyListings(){
             <div className='w-full grid gap-4 p-8 md:grid-cols-2 lg:grid-cols-3 xs:grid-cols-1 justify-center items-center'>
                 {listings1.map((listing, index) => (
                         <div key={index} className='max-w-sm flex flex-col bg-gray-300 shadow-md border-1 border-solid rounded-xl
-                        hover:scale-105
+                        hover:scale-105 hover:border-2 hover:border-gray-500 transition duration-300 ease-in-out
                         '>  
                             <div className='flex justify-between'>
                                     <button className='bg-gray-500 text-white px-4 rounded-md
@@ -226,7 +226,7 @@ export default function MyListings(){
             <div className='w-full grid gap-4 p-8 md:grid-cols-2 lg:grid-cols-3 xs:grid-cols-1 justify-center items-center'>
                 {listings2.map((listing, index) => (
                         <div key={index} className='max-w-sm flex flex-col bg-gray-300 shadow-md border-1 border-solid rounded-xl
-                        hover:scale-105
+                        hover:scale-105 hover:border-2 hover:border-gray-500 transition duration-300 ease-in-out
                         '>  
                                 <div className='flex justify-between'>
                                     <button className='bg-gray-500 text-white px-4 rounded-md

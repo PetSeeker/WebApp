@@ -102,7 +102,10 @@ export default function AdoptionID({params}: {params: {id: string}}){
                     <p>Loading</p>
                 )}
                 </div>
-                <div className='w-2/3 mt-16 bg-black'>
+                <div className='mt-16'>
+                    <h1 className='text-xl underline font-bold'>Animal Information</h1>
+                </div>
+                <div className='w-2/3 mt-2 bg-black'>
                     <table className="table-auto border-separate border border-slate-500 bg-white w-full hover:scale-105">
                         <thead>
                             <tr>
