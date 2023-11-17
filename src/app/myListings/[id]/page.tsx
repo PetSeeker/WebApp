@@ -216,7 +216,7 @@ export default function SaleID({params}: {params: {id: string}}){
                         </div>
                         { selectedGoal === 'SALE' ? (
                             <div className="p-float-label w-1/2">
-                                <InputNumber id="number-input" value={price} onChange={(e) => setPrice(e.value)} />
+                                <InputNumber id="number-input" value={price || 0} onChange={(e) => setPrice(e.value)} />
                                 <label htmlFor="number-input">Price</label>
                             </div> ) : <></>
                         }
