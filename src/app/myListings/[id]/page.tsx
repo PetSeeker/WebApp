@@ -26,12 +26,13 @@ export default function SaleID({params}: {params: {id: string}}){
         location: '',
         owner_email: '',
       });
-    const [name, setName] = useState<string | null>(null);
-    const [type, setType] = useState<string | null>(null);
-    const [breed, setBreed] = useState<string | null>(null);
+    const [email, setEmail] = useState<string | null>(null);
+    const [name, setName] = useState<string>('');
+    const [type, setType] = useState<string>('');
+    const [breed, setBreed] = useState<string>('');
     const [age, setAge] = useState<number | null>(null);
-    const [location, setLocation] = useState<string | null>(null);
-    const [description, setDescription] = useState<string | null>(null);
+    const [location, setLocation] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
     const [price, setPrice] = useState<number | null>(null);
     const [selectedGoal, setSelectedGoal] = useState(null);
     const [images, setImages] = useState([]);
@@ -50,6 +51,8 @@ export default function SaleID({params}: {params: {id: string}}){
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     useEffect(() => {
         const token = localStorage.getItem('access_token');
+        const email = localStorage.getItem('email');
+        setEmail(email);
         if (token && window.location.pathname === '/createPub') {
           setIsAuthenticated(true);
         } else if (window.location.pathname !== '/login') {
@@ -70,7 +73,7 @@ export default function SaleID({params}: {params: {id: string}}){
                 const body = JSON.parse(response.data.body);
                 console.log(body.listing);
                 setListing(body.listing);
-    
+                
                 // Set the state variables with the corresponding listing properties
                 // only if they are not already set
                 setName((prevName) => (prevName !== null ? prevName : body.listing.animal_name || ''));
@@ -98,16 +101,16 @@ export default function SaleID({params}: {params: {id: string}}){
     const sendData = async () => {
         try {
             const formData = new FormData();
-            formData.append('owner_email', email); // Replace with actual owner email
-            formData.append('animal_name', name);
-            formData.append('animal_type', type);
-            formData.append('animal_breed', breed);
-            formData.append('animal_age', age);
-            formData.append('location', location);
-            formData.append('listing_type', selectedGoal);
-            formData.append('description', description);
-            if(listing.animal_price !== null){
-                formData.append('animal_price', price);
+            formData.append('owner_email', email || ''); // Use an empty string if email is null
+            formData.append('animal_name', name || '');
+            formData.append('animal_type', type || '');
+            formData.append('animal_breed', breed || '');
+            formData.append('animal_age', age?.toString() || ''); // Convert age to string, use empty string if null
+            formData.append('location', location || '');
+            formData.append('listing_type', selectedGoal || '');
+            formData.append('description', description || '');
+            if (listing.animal_price !== null) {
+                formData.append('animal_price', price?.toString() || ''); // Convert price to string, use empty string if null
             }
             // formData.append('images', images);
             // Append each file with the key 'images'
@@ -116,9 +119,9 @@ export default function SaleID({params}: {params: {id: string}}){
             });
             
             // Append price only if the listing type is 'sale'
-            if (selectedGoal === 'sale') {
-                formData.append('animal_price', price);
-            } 
+            if (selectedGoal === 'SALE' && price !== null) {
+                formData.append('animal_price', price.toString());
+            }
             
 
 
@@ -135,7 +138,7 @@ export default function SaleID({params}: {params: {id: string}}){
             
                 // Handle the response
                 console.log('API Response:', response.data);
-                sendNot();
+                // sendNot();
                 } catch (error) {
                 // Handle errors
                 console.error('Error making API call:', error);
