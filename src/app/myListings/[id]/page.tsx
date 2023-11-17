@@ -77,13 +77,13 @@ export default function SaleID({params}: {params: {id: string}}){
                 setName((prevName) => prevName || body.listing.animal_name);
                 setType((prevType) => prevType || body.listing.animal_type);
                 setBreed((prevBreed) => prevBreed || body.listing.animal_breed);
-                setAge((prevAge) => prevAge !== null ? prevAge : body.listing.animal_age);
+                setAge((prevAge) => prevAge !== null ? prevAge : parseInt(body.listing.animal_age, 10));
                 setLocation((prevLocation) => prevLocation || body.listing.location);
                 setSelectedGoal((prevSelectedGoal) => prevSelectedGoal || body.listing.listing_type);
                 if(body.listing.animal_price === null){
                     console.log("AQUIIIIIII")
                 }else{
-                    setPrice((prevPrice) => prevPrice !== null ? prevPrice : body.listing.animal_price);
+                    setPrice((prevPrice) => prevPrice !== null ? prevPrice : parseInt(body.listing.animal_price, 10));
                     console.log("AQUI É PARA VENDA---")
                 }
                 
@@ -122,12 +122,6 @@ export default function SaleID({params}: {params: {id: string}}){
             } 
             
 
-            const formDataObject = {};
-            formData.forEach((value, key) => {
-            formDataObject[key] = value;
-            });
-            console.log("Form Data: ", formDataObject)
-
 
             
             
@@ -148,7 +142,7 @@ export default function SaleID({params}: {params: {id: string}}){
                 console.error('Error making API call:', error);
                 }
             
-        } catch (error) {
+        } catch (error: any) {
             // Handle errors
             console.error('API Error:', error.response || error.message || error);
         }
@@ -157,8 +151,8 @@ export default function SaleID({params}: {params: {id: string}}){
         async function sendNot(){
             const data = {
                 "to": email,
-                "subject": "Publication Created",
-                "message": "Your publication has been created"
+                "subject": "Publication Edited",
+                "message": "Your publication has been Edited"
             }
             console.log("email: ", email)
             try {
