@@ -80,7 +80,13 @@ export default function SaleID({params}: {params: {id: string}}){
                 setAge((prevAge) => prevAge !== null ? prevAge : body.listing.animal_age);
                 setLocation((prevLocation) => prevLocation || body.listing.location);
                 setSelectedGoal((prevSelectedGoal) => prevSelectedGoal || body.listing.listing_type);
-                setPrice((prevPrice) => prevPrice !== null ? prevPrice : body.listing.animal_price);
+                if(body.listing.animal_price === null){
+                    console.log("AQUIIIIIII")
+                }else{
+                    setPrice((prevPrice) => prevPrice !== null ? prevPrice : body.listing.animal_price);
+                    console.log("AQUI É PARA VENDA---")
+                }
+                
                 setDescription((prevDescription) => prevDescription || body.listing.description);
                 // ... set other state variables
                 
@@ -101,7 +107,9 @@ export default function SaleID({params}: {params: {id: string}}){
             formData.append('location', location);
             formData.append('listing_type', selectedGoal);
             formData.append('description', description);
-            formData.append('animal_price', price);
+            if(listing.animal_price !== null){
+                formData.append('animal_price', price);
+            }
             // formData.append('images', images);
             // Append each file with the key 'images'
             images.forEach((image, index) => {
@@ -134,17 +142,37 @@ export default function SaleID({params}: {params: {id: string}}){
             
                 // Handle the response
                 console.log('API Response:', response.data);
+                sendNot();
                 } catch (error) {
                 // Handle errors
                 console.error('Error making API call:', error);
                 }
-            window.location.href = '/myListings';
+            
         } catch (error) {
             // Handle errors
             console.error('API Error:', error.response || error.message || error);
         }
         };
         
+        async function sendNot(){
+            const data = {
+                "to": email,
+                "subject": "Publication Created",
+                "message": "Your publication has been created"
+            }
+            console.log("email: ", email)
+            try {
+                // Make the API call using axios
+                const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/notification', data);
+          
+                // Handle the response
+                console.log('API Response Nots:', response.data);
+                // window.location.href = '/myListings';
+              } catch (error) {
+                // Handle errors
+                console.error('Error making API call:', error);
+              }
+        }
 
     return (
         <>
@@ -209,7 +237,7 @@ export default function SaleID({params}: {params: {id: string}}){
                         <FileUpload name="images" url={'/api/upload'} multiple accept="image/*" maxFileSize={1000000} onSelect={handleFileUpload} emptyTemplate={<p className="w-full m-0">Drag and drop images to here to upload.</p>} />
                     </div>
                     <div className='w-full flex items-center justify-center'>
-                        <Button label="Edit Listing" icon="pi pi-check" className='p-3 bg-blue-500 text-white hover:bg-white hover:text-blue-500' text raised onClick={sendData} />
+                        <Button label="Update Listing" icon="pi pi-check" className='p-3 bg-blue-500 text-white hover:bg-white hover:text-blue-500' text raised onClick={sendData} />
                     </div>
                 </div>
             </Layout>

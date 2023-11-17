@@ -64,7 +64,7 @@ export default function Adoption(){
             <>
             <AnimatedText text='Animals for Adoption' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-12 mt-8 '/>
             <Layout className='flex items-center justify-center'>
-                <div className='w-full grid grid-cols-3 gap-4 p-8'>
+                <div className='w-full grid gap-4 p-8 md:grid-cols-2 lg:grid-cols-3 xs:grid-cols-1 justify-center items-center'>
                 {listings.map((listing, index) => (
                     <a href={`/animals/adoption/${listing.listing_id}`}>
                         <div key={index} className='max-w-sm flex flex-col bg-gray-300 shadow-md border-1 border-solid rounded-xl
@@ -72,7 +72,7 @@ export default function Adoption(){
                         '>  
                             <h1 className='text-3xl my-2 font-bold text-center'>{listing.animal_name}</h1>
                             {listing.images.length > 0 ? (
-                                <div className='w-full h-60 items-center justify-center text-center'>
+                                <div className='w-full h-60 items-center justify-center text-center  border-2 border-white'>
                                     <img src={listing.images[0]} alt={"Animal Image"} className='w-full h-full object-cover'/>
                                 </div>
                             ) : (

@@ -114,6 +114,27 @@ export default function MyListings(){
             });
         }
       }, [email]); // The empty dependency array ensures that the effect runs once after the initial render
+
+      const handleDeleteClick = (listingId) => {
+        const confirmed = window.confirm('Are you sure you want to delete the publication?');
+        
+        if (confirmed) {
+          // Perform the deletion logic here
+          console.log('Delete confirmed for listing_id:', listingId);
+        //   axios.delete('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/deleteListings', { listing_id:  })
+        //     .then((response) => {
+        //         // Handle the response
+        //         console.log('API response:', response.data);
+        //     })
+        //     .catch((error) => {
+        //         // Handle errors
+        //         console.error('API Error:', error.response || error.message || error);
+        //     });
+        // } else {
+        //   // Do nothing or handle cancellation
+        //   console.log('Delete cancelled.');
+        }
+      };
     
     return(
         <>
@@ -136,16 +157,18 @@ export default function MyListings(){
         </div>
         <Layout className='flex items-center justify-center flex-col'>
             <h1 className='text-xl underline'>Your publications for Adoption</h1>
-            <div className='w-full grid grid-cols-3 gap-2 p-8'>
+            <div className='w-full grid gap-4 p-8 md:grid-cols-2 lg:grid-cols-3 xs:grid-cols-1 justify-center items-center'>
                 {listings1.map((listing, index) => (
                         <div key={index} className='max-w-sm flex flex-col bg-gray-300 shadow-md border-1 border-solid rounded-xl
                         hover:scale-105
                         '>  
-                            <div className='text-right'>
-                                <a href={`/myListings/${listing.listing_id}`}><button className='bg-gray-500 text-white p-1 rounded-md
-                                hover:bg-gray-300 hover:text-black hover:border-2 hover:border-black
-                                '>Edit Publication</button></a>
-                            </div>
+                            <div className='flex justify-between'>
+                                    <button className='bg-gray-500 text-white px-4 rounded-md
+                                    hover:bg-gray-300 hover:text-black hover:border-2 hover:border-black' onClick={() => handleDeleteClick(listing.listing_id)}>X</button>
+                                    <a href={`/myListings/${listing.listing_id}`}><button className='bg-gray-500 text-white p-1 rounded-md
+                                    hover:bg-gray-300 hover:text-black hover:border-2 hover:border-black
+                                    '>Edit Publication</button></a>
+                                </div>
                             <h1 className='text-3xl my-2 font-bold text-center'>{listing.animal_name}</h1>
                             {listing.images.length > 0 ? (
                                 <div className='w-full h-60 items-center justify-center text-center border-2 border-white'>
@@ -190,18 +213,22 @@ export default function MyListings(){
                 ))}
             </div>
         </Layout>
+        <hr/>
         <Layout className='flex items-center justify-center flex-col'>
             <h1 className='text-xl underline'>Your publications for Sale</h1>
-            <div className='w-full grid grid-cols-3 gap-2 p-8'>
+            <div className='w-full grid gap-4 p-8 md:grid-cols-2 lg:grid-cols-3 xs:grid-cols-1 justify-center items-center'>
                 {listings2.map((listing, index) => (
                         <div key={index} className='max-w-sm flex flex-col bg-gray-300 shadow-md border-1 border-solid rounded-xl
                         hover:scale-105
                         '>  
-                            <div className='text-right'>
-                                <a href={`/myListings/${listing.listing_id}`}><button className='bg-gray-500 text-white p-1 rounded-md
-                                hover:bg-gray-300 hover:text-black hover:border-2 hover:border-black
-                                '>Edit Publication</button></a>
-                            </div>
+                                <div className='flex justify-between'>
+                                    <button className='bg-gray-500 text-white px-4 rounded-md
+                                    hover:bg-gray-300 hover:text-black hover:border-2 hover:border-black' onClick={handleDeleteClick}>X</button>
+                                    <a href={`/myListings/${listing.listing_id}`}><button className='bg-gray-500 text-white p-1 rounded-md
+                                    hover:bg-gray-300 hover:text-black hover:border-2 hover:border-black
+                                    '>Edit Publication</button></a>
+                                </div>
+
                             <h1 className='text-3xl my-2 font-bold text-center'>{listing.animal_name}</h1>
                             {listing.images.length > 0 ? (
                                 <div className='w-full h-60 items-center justify-center text-center border-2 border-white'>
