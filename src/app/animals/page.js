@@ -3,7 +3,7 @@ import Layout from '@/components/Layout';
 import { FaMoneyBill, FaHandHoldingHeart } from "react-icons/fa";
 import {useEffect } from 'react';
 import axios from 'axios';
-import Image from 'next/image';
+
 
 export default function Animals() {
 
