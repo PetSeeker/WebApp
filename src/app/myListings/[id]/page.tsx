@@ -52,7 +52,7 @@ export default function SaleID({params}: {params: {id: string}}){
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     useEffect(() => {
         const token = localStorage.getItem('access_token');
-        setEmail(localStorage.getItem('email'));
+        setEmail(storedEmail as string); // Type assertion here
         if (token && window.location.pathname === '/createPub') {
           setIsAuthenticated(true);
         } else if (window.location.pathname !== '/login') {
