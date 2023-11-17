@@ -60,7 +60,7 @@ export default function SaleID({params}: {params: {id: string}}){
         }
       }, []);
 
-    useEffect(() => {
+      useEffect(() => {
         // Define the API endpoint
         const apiUrl =
           `https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/getListingsID?listing_id=${params.id}`;
@@ -73,28 +73,30 @@ export default function SaleID({params}: {params: {id: string}}){
                 const body = JSON.parse(response.data.body);
                 console.log(body.listing);
                 setListing(body.listing);
-                // Set the state variables with the corresponding listing properties only if they are not already set
-                setName((prevName) => prevName || body.listing.animal_name || null);
-                setType((prevType) => prevType || body.listing.animal_type || null);
-                setBreed((prevBreed) => prevBreed || body.listing.animal_breed || null);
-                setAge((prevAge) => prevAge !== null ? prevAge : parseInt(body.listing.animal_age, 10));
-                setLocation((prevLocation) => prevLocation || body.listing.location || null);
+    
+                // Set the state variables with the corresponding listing properties
+                // only if they are not already set
+                setName((prevName) => (prevName !== null ? prevName : body.listing.animal_name || ''));
+                setType((prevType) => (prevType !== null ? prevType : body.listing.animal_type || ''));
+                setBreed((prevBreed) => (prevBreed !== null ? prevBreed : body.listing.animal_breed || ''));
+                setAge((prevAge) => (prevAge !== null ? prevAge : parseInt(body.listing.animal_age, 10) || null));
+                setLocation((prevLocation) => (prevLocation !== null ? prevLocation : body.listing.location || ''));
                 setSelectedGoal((prevSelectedGoal) => prevSelectedGoal || body.listing.listing_type);
-                if(body.listing.animal_price === null){
+    
+                if (body.listing.animal_price === null) {
                     console.log("AQUIIIIIII")
-                }else{
-                    setPrice((prevPrice) => prevPrice !== null ? prevPrice : parseInt(body.listing.animal_price, 10));
+                } else {
+                    setPrice((prevPrice) => (prevPrice !== null ? prevPrice : parseInt(body.listing.animal_price, 10) || null));
                     console.log("AQUI É PARA VENDA---")
                 }
-                
-                setDescription((prevDescription) => prevDescription || body.listing.description || null);
+    
+                setDescription((prevDescription) => (prevDescription !== null ? prevDescription : body.listing.description || ''));
                 // ... set other state variables
-                
             })
             .catch((error) => {
                 console.error('Error fetching data:', error.message);
             });
-        }, [params.id]); // The empty dependency array ensures that the effect runs once after the initial render
+    }, [params.id]);
 
     const sendData = async () => {
         try {
