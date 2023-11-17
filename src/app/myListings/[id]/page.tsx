@@ -26,8 +26,6 @@ export default function SaleID({params}: {params: {id: string}}){
         location: '',
         owner_email: '',
       });
-
-    const [email, setEmail] = useState('');
     const [name, setName] = useState<string | null>(null);
     const [type, setType] = useState<string | null>(null);
     const [breed, setBreed] = useState<string | null>(null);
@@ -49,10 +47,9 @@ export default function SaleID({params}: {params: {id: string}}){
         // Add more Size objects as needed.
     ];
 
-    const [isAuthenticated, setIsAuthenticated] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     useEffect(() => {
         const token = localStorage.getItem('access_token');
-        setEmail(storedEmail as string); // Type assertion here
         if (token && window.location.pathname === '/createPub') {
           setIsAuthenticated(true);
         } else if (window.location.pathname !== '/login') {
