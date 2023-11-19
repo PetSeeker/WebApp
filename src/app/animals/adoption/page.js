@@ -21,6 +21,7 @@ export default function Adoption(){
           .then((response) => {
             // Set the data in the state
             const body = JSON.parse(response.data.body);
+            console.log(response)
             setListings(body.listings);
             // Handle the response
             // Example: Log the information for each listing

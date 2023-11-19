@@ -156,7 +156,7 @@ export default function SaleID({params}: {params: {id: string}}){
             const data = {
                 "to": email,
                 "subject": "Publication Edited",
-                "message": `Your publication of animal: "${name}" has been Edited`
+                "message": `Your publication of animal: ${name} has been Edited`
             }
             console.log("email: ", email)
             try {

@@ -109,7 +109,7 @@ export default function CreatePub(){
             const data = {
                 "to": email,
                 "subject": "Publication Created",
-                "message": `Your publication of animal: "${name}" has been created`
+                "message": `Your publication of animal: ${name} has been created`
             }
             console.log("email: ", email)
             try {
