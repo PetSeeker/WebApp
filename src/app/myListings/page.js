@@ -148,7 +148,7 @@ export default function MyListings(){
         const data = {
             "to": email,
             "subject": "Publication Deleted",
-            "message": `Your publication of animal: ${animal}, has been Edited`
+            "message": `Your publication of animal: "${animal}", has been Edited`
         }
         console.log("email: ", email)
         try {
