@@ -15,8 +15,6 @@ export default function CreatePub(){
 
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
-    const [type, setType] = useState('');
-    const [breed, setBreed] = useState('');
     const [age, setAge] = useState(null); // or useState(null);
     const [location, setLocation] = useState('');
     const [price, setPrice] = useState(0);
@@ -29,7 +27,6 @@ export default function CreatePub(){
       };
     // Initialize the sizes array with data. Replace this with your actual data.
     const goals = [
-        { name: 'Sale or Adoption', value: null },
         { name: 'SALE', value: 'SALE' },
         { name: 'ADOPTION', value: 'ADOPTION'},
         // Add more Size objects as needed.
@@ -55,8 +52,8 @@ export default function CreatePub(){
             const formData = new FormData();
             formData.append('owner_email', email); // Replace with actual owner email
             formData.append('animal_name', name);
-            formData.append('animal_type', type);
-            formData.append('animal_breed', breed);
+            formData.append('animal_type', selectedType);
+            formData.append('animal_breed', selectedBreed);
             formData.append('animal_age', age);
             formData.append('location', location);
             formData.append('listing_type', selectedGoal);
@@ -125,6 +122,23 @@ export default function CreatePub(){
               }
         }
 
+        const [selectedType, setSelectedType] = useState(null);
+        const types = [
+            { name: 'Dog', value: 'Dog'},
+            { name: 'Cat', value: 'Cat'},
+        ];
+
+        const [selectedBreed, setSelectedBreed] = useState(null);
+        const breeds = [
+            { name: 'Mutt', value: 'Mutt'},
+            { name: 'Spitz', value: 'Spitz'},
+            { name: 'Husky', value: 'Husky'},
+            { name: 'Labrador', value: 'Labrador'},
+            { name: 'German Shepherd', value: 'German Shepherd'},
+            { name: 'Wild', value: 'Wild'},
+            { name: 'Siamese', value: 'Siamese'},  
+        ];
+        
     return (
         <>
         
@@ -137,44 +151,53 @@ export default function CreatePub(){
 
             <Layout className='flex items-center justify-center'>
                 <div className='w-1/3 bg-gray-300 bg-opacity-50 border border-solid rounded-xl flex flex-col items-center justify-center p-8 space-y-6 shadow-lg'>
-                    <div className='w-full flex'>
-                        <div className="p-float-label w-1/2">
-                            <InputText id="username" value={name} onChange={(e) => setName(e.target.value)} className='h-10'  />
+                    <div className='w-full flex grid grid-cols-2 gap-16'>
+                        <div className="w-full p-float-label">
+                            <InputText id="username" value={name} onChange={(e) => setName(e.target.value)} className='h-12 w-full'  />
                             <label htmlFor="username">Animal Name</label>
                         </div>
-                        <div className="p-float-label w-1/2">
-                            <InputText id="username" value={type} onChange={(e) => setType(e.target.value)} className='w-full h-10' />
+                        <div className="w-full p-float-label">
+                            {/* <InputText id="username" value={type} onChange={(e) => setType(e.target.value)} className='h-12 w-full' />
+                            <label htmlFor="username">Animal Type</label> */}
+                            <Dropdown value={selectedType} onChange={(e) => setSelectedType(e.value)} options={types} optionLabel="name" placeholder="Select a Type" 
+                            filter className="w-full h-12" panelClassName='w-2 mt-1' />
                             <label htmlFor="username">Animal Type</label>
                         </div>
                     </div>
-                    <div className='w-full flex'>
-                        <div className="p-float-label w-1/2">
-                            <InputText id="username" value={breed} onChange={(e) => setBreed(e.target.value)} className='h-10'/>
-                            <label htmlFor="username">Breed</label>
+                    <div className='w-full flex grid grid-cols-2 gap-16'>
+                        <div className="w-full p-float-label">
+                            {/* <InputText id="username" value={breed} onChange={(e) => setBreed(e.target.value)} className='h-12'/>
+                            <label htmlFor="username">Breed</label> */}
+                            <Dropdown value={selectedBreed} onChange={(e) => setSelectedBreed(e.value)} options={breeds} optionLabel="name" placeholder="Select a Breed" 
+                            filter className="w-full h-12" panelClassName='w-2 mt-1' />
+                            <label htmlFor="username">Animal Breed</label>
                         </div>
-                        <div className="w-1/2 p-float-label">
-                            <InputNumber id="number-input" value={age} onChange={(e) => setAge(e.value)} />
+                        <div className="w-full p-float-label">
+                            <InputNumber id="number-input" value={age} onChange={(e) => setAge(e.value)} inputClassName='border-none rounded-md h-12 w-full' />
                             <label htmlFor="number-input">Age</label>
                         </div>
                     </div>
-                    <div className='w-full flex'>
-                        <div className="p-float-label w-1/2">
-                            <InputText id="username" value={location} onChange={(e) => setLocation(e.target.value)} className='h-10'/>
+                    <div className='w-full flex grid grid-cols-2 gap-16'>
+                        <div className="p-float-label w-full">
+                            <InputText id="username" value={location} onChange={(e) => setLocation(e.target.value)} className='h-12 w-full'/>
                             <label htmlFor="username">Location</label>
                         </div>
                     </div>
-                    <div className='w-full flex'>
+                    <div className='w-full grid grid-cols-2 gap-16'>
                         {/* <div className="w-1/2">
                             <Dropdown value={selectedSize} onChange={(e) => setSelectedSize(e.value)} options={sizes} optionLabel="name" 
                             placeholder="Select a Size" className='h-2/3' />
                         </div> */}
-                        <div className='w-1/2'>
+                        <div className='w-full p-float-label'>
                             <Dropdown value={selectedGoal} onChange={(e) => setSelectedGoal(e.value)} options={goals} optionLabel="name" 
-                            placeholder="Sale/Adoption" className='h-full'/>
+                            placeholder="Sale/Adoption" className='h-12 w-full'/>
+                            <label htmlFor="username">Sale/Adoption</label>
                         </div>
                         { selectedGoal === 'SALE' ? (
-                            <div className="p-float-label w-1/2">
-                                <input type="number" id="number-input" value={price} onChange={(e) => setPrice(e.target.value)} />
+                            <div className="p-float-label w-full">
+                                {/* <input type="number" id="number-input" value={price} onChange={(e) => setPrice(e.target.value)} />
+                                <label htmlFor="number-input">Price</label> */}
+                                <InputNumber id="number-input" value={price} onChange={(e) => setPrice(e.value)} inputClassName='border-none rounded-md h-12 w-full' />
                                 <label htmlFor="number-input">Price</label>
                             </div> ) : <></>
                         }

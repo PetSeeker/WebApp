@@ -15,6 +15,7 @@ export default function AccountSettings(){
     const handleToggle = () => {
         setIsToggled(!isToggled);
     };
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleApply = async () => {
         console.log("Estado atualizado:", isToggled);
@@ -48,6 +49,7 @@ export default function AccountSettings(){
             // Proceed with your API call
             const response = await axios.put('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/update-notifications', requestData);
             console.log('Resposta:', response);
+            window.location.reload();
         } catch (error) {
             console.error('Erro a ativar/desativar notificações', error);
         }
@@ -55,12 +57,30 @@ export default function AccountSettings(){
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
-        setEmail(localStorage.getItem('email'));
+        const email2 = localStorage.getItem('email');
+        setEmail(email2);
         if (token && window.location.pathname === '/account/settings') {
             setIsAuthenticated(true);
         } else if (window.location.pathname !== '/login') {
             setIsAuthenticated(false);
         }
+        console.log("Email:", email2);
+        axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/usernotificationpreference/${email2}`)
+            .then((response) => {
+                console.log("Resposta:", response.data.users[0].notification_preference);
+                if (response.data.users[0].notification_preference === 1) {
+                    setIsToggled(true);
+                } else {
+                    setIsToggled(false);
+                }
+            })
+            .catch((error) => {
+                console.log("Erro:", error);
+            })
+            .finally(() => {
+                // Set loading state to false when the API call is complete
+                setIsLoading(false);
+            });
       }, []);
 
     
@@ -88,19 +108,25 @@ export default function AccountSettings(){
                             htmlFor="auto-update"
                             className="mt-px ml-3 mb-0 cursor-pointer select-none font-light text-gray-700 mr-2"
                         >
-                            On/Off
+                            Off/On
                         </label>
                         <div className="relative inline-block h-4 w-8 cursor-pointer rounded-full">
-                            <input
-                            id="auto-update"
-                            type="checkbox"
-                            checked={isToggled}
-                            onChange={handleToggle}
-                            className="peer absolute h-4 w-8 cursor-pointer appearance-none rounded-full bg-blue-gray-100 transition-colors duration-300 checked:bg-pink-500 peer-checked:border-pink-500 peer-checked:before:bg-pink-500"
-                            />
+                        {isLoading ? (
+                                // Render a loading state or spinner while waiting for the API call
+                                <p>Loading...</p>
+                            ) : (
+                                // Render the input when isLoading is false
+                                <input
+                                    id="auto-update"
+                                    type="checkbox"
+                                    checked={isToggled}
+                                    onChange={handleToggle}
+                                    className="peer absolute h-4 w-8 cursor-pointer appearance-none rounded-full bg-blue-gray-100 transition-colors duration-300 checked:bg-blue-500 peer-checked:border-blue-500 peer-checked:before:bg-blue-500"
+                                />
+                            )}
                             <label
                             htmlFor="auto-update"
-                            className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-pink-500 peer-checked:before:bg-pink-500"
+                            className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-blue-500 peer-checked:before:bg-blue-500"
                             >
                             <div
                                 className="top-2/4 left-2/4 inline-block -translate-x-2/4 -translate-y-2/4 rounded-full p-5"
