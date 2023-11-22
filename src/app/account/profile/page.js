@@ -43,7 +43,7 @@ export default function AccountProfile(){
         } else if (window.location.pathname !== '/login') {
         setIsAuthenticated(false);
         }
-      }, []);
+    }, []);
 
       useEffect(() => {
         const email2 = localStorage.getItem('email');
