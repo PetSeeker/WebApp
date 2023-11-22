@@ -28,11 +28,11 @@ export const Navbar = () => {
 				});
 				const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
 				const username = responseBody.username; // Extract the username
-	
+				console.log("AQUIIIIIIIIII:", responseBody);
 				// Update the local storage first
 				localStorage.setItem('username', username);
 				localStorage.setItem('email', responseBody.email);
-				sendNot(responseBody.email)
+				sendNot(responseBody.email, username)
 		
 				// Then update the state
 				setUsername(username);
@@ -116,26 +116,46 @@ export const Navbar = () => {
 		});
 	}
 
-	async function sendNot(email3) {
+	async function sendNot(email3, username3) {
+		// try {
+		//   console.log("email3: ", email3);
+		//   const requestData2 = {
+		// 	email: email3,
+		//   };
+	  
+		//   const response = await axios.post(
+		// 	'https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/verify-and-add-email',
+		// 	requestData2
+		//   );
+	  
+		//   // Handle the response data
+		//   console.log('API Response:', response.data);
+		//   // const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
+	  
+		// } catch (error) {
+		//   // Handle any errors
+		//   console.error('Error:', error);
+		// }
+		//CREATE USER PROFILE
 		try {
-		  console.log("email3: ", email3);
-		  const requestData2 = {
-			email: email3,
-		  };
-	  
-		  const response = await axios.post(
-			'https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/verify-and-add-email',
-			requestData2
-		  );
-	  
-		  // Handle the response data
-		  console.log('API Response:', response.data);
-		  // const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
-	  
-		} catch (error) {
-		  // Handle any errors
-		  console.error('Error:', error);
-		}
+			const formData = new FormData();
+			formData.append('username', username3);
+			formData.append('email', email3);
+			formData.append('gender', "male");
+		
+			const response = await axios.post(
+			  'https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/user-profile',
+			  formData
+			);
+		
+			// Handle the response data
+			console.log('API Response of User Profile:', response.data);
+			// const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
+		
+		  } catch (error) {
+			// Handle any errors
+			console.error('Error:', error);
+		  }
 	  }
 	  
 
