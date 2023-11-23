@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import imagexample from '../../../../../public/images/userdefault1.png';
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
 
 export default function profileID({params}: {params: {id: string}}){
 
@@ -16,6 +18,7 @@ export default function profileID({params}: {params: {id: string}}){
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
     const [interests, setInterests] = useState([]);
+    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
         const storedEmail = localStorage.getItem('email');
@@ -45,8 +48,9 @@ export default function profileID({params}: {params: {id: string}}){
                     setDescription(response.data.description);
                 }
                 setImage(response.data.image[0]);
+                console.log("Interests:", response.data.interests);
                 setInterests(response.data.interests);
-
+                
   
             })
             .catch((error) => {
@@ -59,7 +63,7 @@ export default function profileID({params}: {params: {id: string}}){
         <>
             <AnimatedText text='User Profile' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-16 mt-8 '/> 
             <Layout className='flex items-center justify-center'>
-                <div className='w-3/4 flex grid grid-cols-3 gap-4  p-24 rounded-xl'>
+                <div className='w-3/4 grid grid-cols-3 gap-4  p-24 rounded-xl'>
                     <div className='w-full border-2 shadow-xl p-4 grid grid-col-1 gap-2 items-center justify-center'>
                         <Image  src={image ? image : imagexample} width={200} height={200} className='rounded-full' alt='profile image'/>
                         <h1 className='text-center text-2xl font-bold'>{firstName} {lastName}</h1>
@@ -79,19 +83,36 @@ export default function profileID({params}: {params: {id: string}}){
                         <div className='w-full grid grid-cols-2'>
                             <h3 className='font-bold'>Address</h3>
                             <h3>{location}</h3>
-                        </div> 
+                        </div>
                         <hr />
                         <div className='w-full grid grid-cols-2'>
                             <h3 className='font-bold'>Interests</h3>
-                            {interests.map((interest, index) => (
-                                <h3>{interest}</h3>
-                            ))}
-                        </div> 
+                            <h3>{interests.map((interestObj: { interest: string }, index: number) => interestObj.interest).join(', ')}</h3>
+                        </div>
                         <hr />
                         <div className='w-full grid grid-cols-2'>
                             <h3 className='font-bold'>Description</h3>
-                            <h3>{params.id}</h3>
+                            <div className='w-full'>
+                                <Button label="Show" icon="pi pi-external-link" onClick={() => setVisible(true)} className='p-4 hover:bg-gray-500 hover:text-white'/>
+                                <Dialog header="Description" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
+                                    <p className="m-0">
+                                    {description}
+                                    </p>
+                                </Dialog>
+                            </div>    
                         </div> 
+                        {email === emailUser ? (
+                            <>
+                                <hr />
+                                <div className='w-full grid grid-cols-2 mt-4'>
+                                    <div className='w-2/3'>
+                                        <Button label="Edit Profile" icon="pi pi-check" className='p-3 bg-blue-500 text-white hover:bg-white hover:text-blue-500' text raised/>
+                                    </div>   
+                                </div>
+                            </>   
+                        ) : (
+                            <div></div>
+                        )}
                     </div>
                 </div>
             </Layout>
