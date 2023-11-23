@@ -92,7 +92,7 @@ export default function AccountSettings(){
         <p>Loading...</p>
         ) : isAuthenticated ? ( // Content for authenticated users
         <>
-        <AnimatedText text='Account Settings' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-16 mt-8 '/>
+        <AnimatedText text='Account Settings' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-8 mt-8 '/>
         <Layout className='flex items-center justify-center'>
             <div className='w-2/3 border border-solid rounded-xl bg-white flex-col p-4 shadow-lg'>
                 <div className='w-full flex items-center justify-center flex-row '>

@@ -19,19 +19,25 @@ export default function profileID({params}: {params: {id: string}}){
     const [image, setImage] = useState('');
     const [interests, setInterests] = useState([]);
     const [visible, setVisible] = useState(false);
+    const [avgRating, setAvgRating] = useState(0);
+    const [star1Percentage, setStar1Percentage] = useState(0);
+    const [star2Percentage, setStar2Percentage] = useState(0);
+    const [star3Percentage, setStar3Percentage] = useState(0);
+    const [star4Percentage, setStar4Percentage] = useState(0);
+    const [star5Percentage, setStar5Percentage] = useState(0);
+    const [userRatings, setUserRatings] = useState({});
 
     useEffect(() => {
         const storedEmail = localStorage.getItem('email');
         if (storedEmail) {
             setEmail(storedEmail);
-            console.log(storedEmail);
         }
     }, []);
 
     useEffect(() => {
         axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/get-user/${params.id}`)
             .then((response) => {
-                console.log("Resposta info utilizador:", response.data);
+                // console.log("Resposta info utilizador:", response.data);
                 if(response.data.firstName !== null){
                     setFirstName(response.data.first_name);
                 }
@@ -48,10 +54,38 @@ export default function profileID({params}: {params: {id: string}}){
                     setDescription(response.data.description);
                 }
                 setImage(response.data.image[0]);
-                console.log("Interests:", response.data.interests);
                 setInterests(response.data.interests);
                 
   
+            })
+            .catch((error) => {
+                console.log("Erro:", error);
+            })
+
+        axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings/user/${params.id}`)
+            .then((response) => {
+                console.log("Resposta info ratings", response.data);
+                setAvgRating(response.data.average_rating);
+                setStar1Percentage(response.data.star_percentages[0]);
+                setStar2Percentage(response.data.star_percentages[1]);
+                setStar3Percentage(response.data.star_percentages[2]);
+                setStar4Percentage(response.data.star_percentages[3]);
+                setStar5Percentage(response.data.star_percentages[4]);
+                
+                // Iterate through the array and save each user rating
+                response.data.raters.forEach((item: any) => {
+                    // Assuming each item has a user email and a rating
+                    const userEmail = Object.keys(item)[0];
+                    const userRating = item[userEmail];
+
+                    // Save the user rating in the ratings object
+                    console.log("userEmail:", userEmail);
+                    console.log("userRating:", userRating);
+                    
+                });
+
+            // Set the user ratings state
+            // setUserRatings(ratings)
             })
             .catch((error) => {
                 console.log("Erro:", error);
@@ -61,37 +95,40 @@ export default function profileID({params}: {params: {id: string}}){
 
     return(
         <>
-            <AnimatedText text='User Profile' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-16 mt-8 '/> 
+            <AnimatedText text='User Profile' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-8 mt-8 '/> 
             <Layout className='flex items-center justify-center'>
-                <div className='w-3/4 grid grid-cols-3 gap-4  p-24 rounded-xl'>
-                    <div className='w-full border-2 shadow-xl p-4 grid grid-col-1 gap-2 items-center justify-center'>
+                <div className='w-3/4 grid grid-cols-3 gap-4 p-2 rounded-xl'>
+                    <div className='w-full border-2 shadow-xl p-4 grid grid-col-1 gap-2 items-center justify-center
+                    rounded-xl'>
                         <Image  src={image ? image : imagexample} width={200} height={200} className='rounded-full' alt='profile image'/>
                         <h1 className='text-center text-2xl font-bold'>{firstName} {lastName}</h1>
                         <h3 className='text-center text-xl'>{location}</h3>
                     </div>
-                    <div className='w-full border-2 shadow-xl col-span-2 grid grid-cols-1  p-8'>
+                    <div className='w-full border-2 shadow-xl col-span-2 grid grid-cols-1  p-8 rounded-xl'>
                         <div className='w-full grid grid-cols-2'>
                             <h3 className='font-bold'>Full Name</h3>
                             <h3>{firstName} {lastName}</h3>
                         </div> 
-                        <hr />
+                        <hr className='my-3' />
                         <div className='w-full grid grid-cols-2'>
                             <h3 className='font-bold'>Email</h3>
                             <h3>{emailUser}</h3>
                         </div> 
-                        <hr />
+                        <hr className='my-3'/>
                         <div className='w-full grid grid-cols-2'>
                             <h3 className='font-bold'>Address</h3>
                             <h3>{location}</h3>
                         </div>
-                        <hr />
+                        <hr className='my-3'/>
                         <div className='w-full grid grid-cols-2'>
                             <h3 className='font-bold'>Interests</h3>
                             <h3>{interests.map((interestObj: { interest: string }, index: number) => interestObj.interest).join(', ')}</h3>
                         </div>
-                        <hr />
+                        <hr className='my-3'/>
                         <div className='w-full grid grid-cols-2'>
-                            <h3 className='font-bold'>Description</h3>
+                            <div className='w-full items-center justify-center'>
+                                <h3 className='font-bold mt-4'>Description</h3>
+                            </div>
                             <div className='w-full'>
                                 <Button label="Show" icon="pi pi-external-link" onClick={() => setVisible(true)} className='p-4 hover:bg-gray-500 hover:text-white'/>
                                 <Dialog header="Description" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
@@ -106,7 +143,7 @@ export default function profileID({params}: {params: {id: string}}){
                                 <hr />
                                 <div className='w-full grid grid-cols-2 mt-4'>
                                     <div className='w-2/3'>
-                                        <Button label="Edit Profile" icon="pi pi-check" className='p-3 bg-blue-500 text-white hover:bg-white hover:text-blue-500' text raised/>
+                                        <a href='/account/profile'><Button label="Edit" className='p-3 bg-blue-500 text-white hover:bg-white hover:text-blue-500 px-8' text raised/></a>
                                     </div>   
                                 </div>
                             </>   

@@ -117,25 +117,25 @@ export const Navbar = () => {
 	}
 
 	async function sendNot(email3, username3) {
-		// try {
-		//   console.log("email3: ", email3);
-		//   const requestData2 = {
-		// 	email: email3,
-		//   };
+		try {
+		  console.log("email3: ", email3);
+		  const requestData2 = {
+			email: email3,
+		  };
 	  
-		//   const response = await axios.post(
-		// 	'https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/verify-and-add-email',
-		// 	requestData2
-		//   );
+		  const response = await axios.post(
+			'https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/verify-and-add-email',
+			requestData2
+		  );
 	  
-		//   // Handle the response data
-		//   console.log('API Response:', response.data);
-		//   // const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
+		  // Handle the response data
+		  console.log('API Response:', response.data);
+		  // const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
 	  
-		// } catch (error) {
-		//   // Handle any errors
-		//   console.error('Error:', error);
-		// }
+		} catch (error) {
+		  // Handle any errors
+		  console.error('Error:', error);
+		}
 		//CREATE USER PROFILE
 		try {
 			const formData = new FormData();
@@ -227,7 +227,7 @@ export const Navbar = () => {
 				<div className="z-10 absolute mt-2 bg-light w-full border border-solid rounded-xl">
 					<ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDelayButton">
 						<li>
-						<a href="/account/profile" className="block px-4 py-2 hover:bg-gray-200" >
+						<a href={`/account/profile/${email}`} className="block px-4 py-2 hover:bg-gray-200" >
 							Profile
 						</a>
 						</li>

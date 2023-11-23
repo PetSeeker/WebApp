@@ -142,9 +142,9 @@ export default function AccountProfile(){
         <p>Loading...</p>
         ) : isAuthenticated ? ( // Content for authenticated users
         <>
-        <AnimatedText text='Profile' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-16 mt-8 '/>
+        <AnimatedText text='Edit Profile' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-16 mt-8 '/>
         <Layout className='flex items-center justify-center'>
-            <div className='w-2/3 flex grid grid-cols-3 gap-8 border-2 shadow-xl p-24 rounded-xl'>
+            <div className='w-2/3 grid grid-cols-3 gap-8 border-2 shadow-xl p-24 rounded-xl'>
                 <div className='w-full col-span-2'>
                     <div className="w-full p-float-label">
                         <InputText id="username" value={username} onChange={(e) => setUsername(e.target.value)} className='h-12 w-full p-4' disabled  />
