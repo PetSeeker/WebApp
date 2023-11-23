@@ -114,20 +114,22 @@ export default function AdoptionID({params}: {params: {id: string}}){
                             <th className="border border-slate-600">Animal Breed</th>
                             <th className="border border-slate-600">Animal Age</th>
                             <th className="border border-slate-600">Location</th>
-                            <th className="border border-slate-600">Owner Email</th>
+                            <th className="border border-slate-600">Owner Profile</th>
                             <th className="border border-slate-600">Description</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                            <td className="border border-slate-700">{listing.animal_name}</td>
-                            <td className="border border-slate-700">{listing.animal_type}</td>
-                            <td className="border border-slate-700">{listing.animal_breed}</td>
-                            <td className="border border-slate-700">{listing.animal_age}</td>
-                            <td className="border border-slate-700">{listing.location}</td>
-                            <td className="border border-slate-700">{listing.owner_email}</td>
-                            <td className="border border-slate-700">
-                            <Button label="Show" icon="pi pi-external-link" onClick={() => setVisible(true)} className='p-4 hover:bg-gray-500 hover:text-white'/>
+                            <td className="border border-slate-700 p-2">{listing.animal_name}</td>
+                            <td className="border border-slate-700 p-2">{listing.animal_type}</td>
+                            <td className="border border-slate-700 p-2">{listing.animal_breed}</td>
+                            <td className="border border-slate-700 p-2">{listing.animal_age}</td>
+                            <td className="border border-slate-700 p-2">{listing.location}</td>
+                            <td className="border border-slate-700 p-2">
+                            <a href={`/account/profile/${listing.owner_email}`}><Button label="Owner Profile" className='p-2 bg-blue-500 text-white hover:bg-white hover:text-blue-500 ' text raised/></a>
+                            </td>
+                            <td className="border border-slate-700 p-2">
+                            <Button label="Show" icon="pi pi-external-link" onClick={() => setVisible(true)} className='p-2 bg-blue-500 text-white hover:bg-white hover:text-blue-500' text raised/>
                             <Dialog header="Description" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
                                 <p className="m-0">
                                 {listing.description}

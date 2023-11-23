@@ -7,6 +7,9 @@ import Image from 'next/image';
 import imagexample from '../../../../../public/images/userdefault1.png';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
+import { Rating } from 'primereact/rating';
+import Rating2 from '@mui/material/Rating';
+import { ProgressBar } from 'primereact/progressbar';
 
 export default function profileID({params}: {params: {id: string}}){
 
@@ -19,13 +22,15 @@ export default function profileID({params}: {params: {id: string}}){
     const [image, setImage] = useState('');
     const [interests, setInterests] = useState([]);
     const [visible, setVisible] = useState(false);
+    const [visible2, setVisible2] = useState(false);
     const [avgRating, setAvgRating] = useState(0);
     const [star1Percentage, setStar1Percentage] = useState(0);
     const [star2Percentage, setStar2Percentage] = useState(0);
     const [star3Percentage, setStar3Percentage] = useState(0);
     const [star4Percentage, setStar4Percentage] = useState(0);
     const [star5Percentage, setStar5Percentage] = useState(0);
-    const [userRatings, setUserRatings] = useState({});
+    const userRatings = [];
+    const [ratingValue, setRatingValue] = useState(0);
 
     useEffect(() => {
         const storedEmail = localStorage.getItem('email');
@@ -65,12 +70,17 @@ export default function profileID({params}: {params: {id: string}}){
         axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings/user/${params.id}`)
             .then((response) => {
                 console.log("Resposta info ratings", response.data);
-                setAvgRating(response.data.average_rating);
+                if(response.data.average_rating === null){
+                    setAvgRating(0);
+                } else {
+                    setAvgRating(response.data.average_rating);
+                }
                 setStar1Percentage(response.data.star_percentages[0]);
                 setStar2Percentage(response.data.star_percentages[1]);
                 setStar3Percentage(response.data.star_percentages[2]);
                 setStar4Percentage(response.data.star_percentages[3]);
                 setStar5Percentage(response.data.star_percentages[4]);
+                
                 
                 // Iterate through the array and save each user rating
                 response.data.raters.forEach((item: any) => {
@@ -81,6 +91,15 @@ export default function profileID({params}: {params: {id: string}}){
                     // Save the user rating in the ratings object
                     console.log("userEmail:", userEmail);
                     console.log("userRating:", userRating);
+
+                    // Create an object with email and rating properties
+                    const userRatingObject = {
+                        email: userEmail,
+                        rating: userRating,
+                    };
+
+                    // Push the object into the userRatings array
+                    userRatings.push(userRatingObject);
                     
                 });
 
@@ -92,19 +111,39 @@ export default function profileID({params}: {params: {id: string}}){
             })
       }, []);
 
+    async function sendRating() {
+        const formData = new FormData();
+        formData.append('user_email', email);
+        formData.append('rating', ratingValue.toString());
+        formData.append('rater_email', emailUser);
+        // Log FormData entries
+        formData.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+        });
+        
+        axios.post(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings`, formData)
+        .then((response) => {
+            console.log("Resposta info criar rating", response.data);
+            setVisible(false);
+            window.location.reload();
+        })
+        .catch((error) => {
+            console.log("Erro:", error);
+        })
+    }
 
     return(
         <>
             <AnimatedText text='User Profile' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-8 mt-8 '/> 
             <Layout className='flex items-center justify-center'>
                 <div className='w-3/4 grid grid-cols-3 gap-4 p-2 rounded-xl'>
-                    <div className='w-full border-2 shadow-xl p-4 grid grid-col-1 gap-2 items-center justify-center
+                    <div className='w-full border-2 shadow-md p-4 grid grid-col-1 gap-2 items-center justify-center
                     rounded-xl'>
                         <Image  src={image ? image : imagexample} width={200} height={200} className='rounded-full' alt='profile image'/>
                         <h1 className='text-center text-2xl font-bold'>{firstName} {lastName}</h1>
                         <h3 className='text-center text-xl'>{location}</h3>
                     </div>
-                    <div className='w-full border-2 shadow-xl col-span-2 grid grid-cols-1  p-8 rounded-xl'>
+                    <div className='w-full border-2 shadow-md col-span-2 grid grid-cols-1  p-8 rounded-xl'>
                         <div className='w-full grid grid-cols-2'>
                             <h3 className='font-bold'>Full Name</h3>
                             <h3>{firstName} {lastName}</h3>
@@ -147,6 +186,80 @@ export default function profileID({params}: {params: {id: string}}){
                                     </div>   
                                 </div>
                             </>   
+                        ) : (
+                            <div></div>
+                        )}
+                    </div>
+                    {/* <div className='w-full border-2 shadow-xl p-4 grid gap-2 items-center justify-center
+                    rounded-xl'> */}
+                    <div className='w-full'>
+                        {/* <div className='w-full grid grid-cols-1 gap-2'> 
+                            <h1 className='text-5xl text-center'>{avgRating}</h1>
+                            <Rating2  name="half-rating" value={avgRating} precision={0.5} />
+                            <h3 className='text-center'>Average Rating</h3>
+                        </div> */}
+                    </div>
+                    <div className='w-full border-2 shadow-md col-span-2 p-4 grid grid-cols-3 gap-2 items-center justify-center
+                    rounded-xl'>
+                        <div className='w-full grid grid-cols-1 gap-2 items-center justify-center'> 
+                            {/* { avgRating === 0 ? (} */}
+                            <h1 className='text-5xl text-center'>{avgRating.toFixed(1)}</h1>
+                            <div className='w-full items-center justify-center text-center'>
+                                <Rating2 name="half-rating" value={avgRating} precision={0.5} readOnly />
+                            </div>
+                            <h3 className='text-center'>Average Rating</h3>
+                        </div>
+                        <div className='w-full col-span-2 grid grid-cols-1 gap-2'>
+                            <div className='w-full grid grid-cols-3 gap-2'>
+                                <div className='w-full col-span-2'>
+                                    <ProgressBar value={star5Percentage} />
+                                </div>
+                                <Rating2 name="half-rating" value={5} precision={0.5} readOnly />
+                                <div className='w-full col-span-2'>
+                                    <ProgressBar value={star4Percentage} />
+                                </div>
+                                <Rating2 name="half-rating" value={4} precision={0.5} readOnly />
+                                <div className='w-full col-span-2'>
+                                    <ProgressBar value={star3Percentage} />
+                                </div>
+                                <Rating2 name="half-rating" value={3} precision={0.5} readOnly />
+                                <div className='w-full col-span-2'>
+                                    <ProgressBar value={star2Percentage} />
+                                </div>
+                                <Rating2 name="half-rating" value={2} precision={0.5} readOnly />
+                                <div className='w-full col-span-2'>
+                                    <ProgressBar value={star1Percentage} />
+                                </div>
+                                <Rating2 name="half-rating" value={1} precision={0.5} readOnly />
+                            </div>
+                        </div>
+                        <div className='w-full col-span-2'> 
+                        </div>
+                        {email !== emailUser ? (
+                            <>
+                                <div className='w-full text-right mt-2 '> 
+                                    <Button label="Give a Rating" icon="pi pi-external-link" onClick={() => setVisible2(true)} className='p-2 bg-blue-500 text-white hover:bg-white hover:text-blue-500 -translate-x-5'/>
+                                    <Dialog header="Give Rating" visible={visible2} style={{ width: '50vw' }} onHide={() => setVisible2(false)}>
+                                        <div className='m-0 flex flex-col'>
+                                            <div className='w-full text-center'>
+                                                <Rating2
+                                                name="simple-controlled"
+                                                value={ratingValue !== null ? ratingValue : 0}
+                                                onChange={(event, newValue) => {
+                                                    setRatingValue(newValue !== null ? newValue : 0);
+                                                }}
+                                                />
+                                            </div>
+                                           <div className='w-full text-right'>
+                                                <Button label="Submit" icon="pi pi-external-link" onClick={sendRating} 
+                                                className='p-2 bg-blue-500 text-white hover:bg-white hover:text-blue-500 -translate-x-5'
+                                                />
+                                           </div>
+                                        </div>
+
+                                    </Dialog>
+                                </div>
+                            </>
                         ) : (
                             <div></div>
                         )}

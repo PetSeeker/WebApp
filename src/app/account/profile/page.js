@@ -98,7 +98,7 @@ export default function AccountProfile(){
             axios.put(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/edit-user-profile/${email}`, formData)
             .then((response) => {
                 console.log("Resposta info editada do utilizador:", response.data);
-                window.location.reload();
+                window.location.href = `/account/profile/${email}`;
             })
             .catch((error) => {
                 console.log("Erro:", error);
