@@ -31,6 +31,10 @@ export default function profileID({params}: {params: {id: string}}){
     const [star5Percentage, setStar5Percentage] = useState(0);
     const userRatings = [];
     const [ratingValue, setRatingValue] = useState(0);
+    const [giveRating, setGiveRating] = useState(false);
+    const [ratingID, setRatingID] = useState('');
+    const [editRating, setEditRating] = useState(0);
+    const [ratingsCount, setRatingsCount] = useState(0);
 
     useEffect(() => {
         const storedEmail = localStorage.getItem('email');
@@ -80,7 +84,7 @@ export default function profileID({params}: {params: {id: string}}){
                 setStar3Percentage(response.data.star_percentages[2]);
                 setStar4Percentage(response.data.star_percentages[3]);
                 setStar5Percentage(response.data.star_percentages[4]);
-                
+                setRatingsCount(response.data.ratings_count);
                 
                 // Iterate through the array and save each user rating
                 response.data.raters.forEach((item: any) => {
@@ -89,8 +93,8 @@ export default function profileID({params}: {params: {id: string}}){
                     const userRating = item[userEmail];
 
                     // Save the user rating in the ratings object
-                    console.log("userEmail:", userEmail);
-                    console.log("userRating:", userRating);
+                    // console.log("userEmail:", userEmail);
+                    // console.log("userRating:", userRating);
 
                     // Create an object with email and rating properties
                     const userRatingObject = {
@@ -109,7 +113,26 @@ export default function profileID({params}: {params: {id: string}}){
             .catch((error) => {
                 console.log("Erro:", error);
             })
+        
       }, []);
+
+      
+        useEffect(() => {
+            console.log("AQUIIII:", emailUser )
+            axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings?user_email=${emailUser}&rater_email=${email}`)
+            .then((response) => {
+                console.log("Resposta, ja deu rating?", response.data);
+                if(response.data.rating_id === null){
+                    setGiveRating(false);
+                } else {
+                    setGiveRating(true);
+                    setRatingID(response.data.rating_id);
+                }
+            })
+            .catch((error) => {
+                console.log("Erro:", error);
+            })
+        }, [email, emailUser]);
 
     async function sendRating() {
         const formData = new FormData();
@@ -130,6 +153,50 @@ export default function profileID({params}: {params: {id: string}}){
         .catch((error) => {
             console.log("Erro:", error);
         })
+    }
+
+    async function updateRating(ratingID: string) {
+        console.log("EditRating:", editRating);
+        const formData = new FormData();
+        formData.append('rating', editRating.toString());
+        await axios.put(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings/${ratingID}`, formData)
+            .then((response) => {
+                console.log(response.data);
+                setVisible(false);
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log("Erro:", error);
+            })
+    }
+
+    async function deleteRating(ratingID: string) {
+        const confirmed = window.confirm('Are you sure you want to delete your rating?');
+        if (!confirmed) {
+            window.location.reload();
+        } else {
+            await axios.delete(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings/${ratingID}`)
+            .then((response) => {
+                console.log(response.data);
+                setVisible(false);
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log("Erro:", error);
+            })
+        } 
+    }
+
+    async function getRatingIDValue(ratingID: string) {
+        await axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings/${ratingID}`)
+            .then((response) => {
+                console.log(response.data["Rating retrieved successfully"]);
+                setEditRating(response.data["Rating retrieved successfully"]);
+                
+            })
+            .catch((error) => {
+                console.log("Erro:", error);
+            })
     }
 
     return(
@@ -208,6 +275,10 @@ export default function profileID({params}: {params: {id: string}}){
                                 <Rating2 name="half-rating" value={avgRating} precision={0.5} readOnly />
                             </div>
                             <h3 className='text-center'>Average Rating</h3>
+                            <div className='w-full text-black text-opacity-50'>
+                                <h4 className='text-center'>Ratings Count: {ratingsCount}</h4>
+                            </div>
+                            
                         </div>
                         <div className='w-full col-span-2 grid grid-cols-1 gap-2'>
                             <div className='w-full grid grid-cols-3 gap-2'>
@@ -235,31 +306,64 @@ export default function profileID({params}: {params: {id: string}}){
                         </div>
                         <div className='w-full col-span-2'> 
                         </div>
-                        {email !== emailUser ? (
+                        {email === emailUser ? (
                             <>
-                                <div className='w-full text-right mt-2 '> 
-                                    <Button label="Give a Rating" icon="pi pi-external-link" onClick={() => setVisible2(true)} className='p-2 bg-blue-500 text-white hover:bg-white hover:text-blue-500 -translate-x-5'/>
-                                    <Dialog header="Give Rating" visible={visible2} style={{ width: '50vw' }} onHide={() => setVisible2(false)}>
-                                        <div className='m-0 flex flex-col'>
-                                            <div className='w-full text-center'>
-                                                <Rating2
-                                                name="simple-controlled"
-                                                value={ratingValue !== null ? ratingValue : 0}
-                                                onChange={(event, newValue) => {
-                                                    setRatingValue(newValue !== null ? newValue : 0);
-                                                }}
-                                                />
-                                            </div>
-                                           <div className='w-full text-right'>
-                                                <Button label="Submit" icon="pi pi-external-link" onClick={sendRating} 
-                                                className='p-2 bg-blue-500 text-white hover:bg-white hover:text-blue-500 -translate-x-5'
-                                                />
-                                           </div>
+                                {giveRating === false ? (
+                                    <>
+                                        <div className='w-full text-right mt-2 '> 
+                                            <Button label="Give a Rating" icon="pi pi-external-link" onClick={() => setVisible2(true)} className='p-2 bg-blue-500 text-white hover:bg-white hover:text-blue-500 -translate-x-5'/>
+                                            <Dialog header="Give Rating" visible={visible2} style={{ width: '50vw' }} onHide={() => setVisible2(false)}>
+                                                <div className='m-0 flex flex-col'>
+                                                    <div className='w-full text-center'>
+                                                        <Rating2
+                                                        name="simple-controlled"
+                                                        value={ratingValue !== null ? ratingValue : 0}
+                                                        onChange={(event, newValue) => {
+                                                            setRatingValue(newValue !== null ? newValue : 0);
+                                                        }}
+                                                        />
+                                                    </div>
+                                                <div className='w-full text-right'>
+                                                        <Button label="Submit" icon="pi pi-external-link" onClick={sendRating} 
+                                                        className='p-2 bg-blue-500 text-white hover:bg-white hover:text-blue-500 -translate-x-5'
+                                                        />
+                                                </div>
+                                                </div>
+        
+                                            </Dialog>
                                         </div>
-
-                                    </Dialog>
-                                </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className='w-full text-right mt-2 '> 
+                                            <Button label="Edit Rating" icon="pi pi-external-link" onClick={() => {setVisible2(true); getRatingIDValue(ratingID)}} className='p-2 bg-blue-500 text-white hover:bg-white hover:text-blue-500 -translate-x-5'/>
+                                            <Dialog header="Edit Rating" visible={visible2} style={{ width: '50vw' }} onHide={() => setVisible2(false)}>
+                                                <div className='m-0 flex flex-col'>
+                                                    <div className='w-full text-center'>
+                                                        <Rating2
+                                                        name="simple-controlled"
+                                                        value={editRating !== null ? editRating : 0}
+                                                        onChange={(event, newValue) => {
+                                                            setEditRating(newValue !== null ? newValue : 0);
+                                                        }}
+                                                        />
+                                                    </div>
+                                                <div className='w-full text-right mt-2'>
+                                                        <Button label="Submit" icon="pi pi-external-link"  onClick={() =>updateRating(ratingID)} 
+                                                        className='p-2 bg-blue-500 text-white hover:bg-white hover:text-blue-500 -translate-x-5'
+                                                        />
+                                                        <Button label="Delete Rating"  onClick={() =>deleteRating(ratingID)} 
+                                                        className=' ml-2 p-2 bg-red-500 text-white hover:bg-white hover:text-red-500 -translate-x-5'
+                                                        />
+                                                </div>
+                                                </div>
+        
+                                            </Dialog>
+                                        </div>
+                                    </>
+                                )}
                             </>
+                            
                         ) : (
                             <div></div>
                         )}
