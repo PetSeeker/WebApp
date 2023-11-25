@@ -306,7 +306,7 @@ export default function profileID({params}: {params: {id: string}}){
                         </div>
                         <div className='w-full col-span-2'> 
                         </div>
-                        {email === emailUser ? (
+                        {email !== emailUser ? (
                             <>
                                 {giveRating === false ? (
                                     <>
