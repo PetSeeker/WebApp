@@ -11,7 +11,7 @@ import { Rating } from 'primereact/rating';
 import Rating2 from '@mui/material/Rating';
 import { ProgressBar } from 'primereact/progressbar';
 
-export default function profileID({params}: {params: {id: string}}){
+export default function ProfileID({params}: {params: {id: string}}){
 
     const [email, setEmail] = useState('');
     const [emailUser, setEmailUser] = useState('');
