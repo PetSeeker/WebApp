@@ -98,6 +98,7 @@ export default function AccountProfile(){
             axios.put(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/edit-user-profile/${email}`, formData)
             .then((response) => {
                 console.log("Resposta info editada do utilizador:", response.data);
+                sendNot();
                 window.location.href = `/account/profile/${email}`;
             })
             .catch((error) => {
@@ -135,6 +136,25 @@ export default function AccountProfile(){
 
         setIngredients(_ingredients);
     }
+
+    async function sendNot(){
+        const data = {
+            "to": email,
+            "subject": "Profile Updated",
+            "message": `Your Profile has been updated.`
+        }
+        try {
+            // Make the API call using axios
+            const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/notification', data);
+      
+            // Handle the response
+            console.log('API Response:', response.data);
+          } catch (error) {
+            // Handle errors
+            console.error('Error making API call:', error);
+          }
+    }
+
     return (
 <>
         {isAuthenticated === null ? ( // Display nothing or a loading indicator while checking authentication
