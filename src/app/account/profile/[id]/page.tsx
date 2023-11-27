@@ -276,7 +276,7 @@ export default function ProfileID({params}: {params: {id: string}}){
                             </div>
                             <h3 className='text-center'>Average Rating</h3>
                             <div className='w-full text-black text-opacity-50'>
-                                <h4 className='text-center'>Ratings Count: {ratingsCount}</h4>
+                                <h4 className='text-center'>Ratings Countqwe: {ratingsCount}</h4>
                             </div>
                             
                         </div>
