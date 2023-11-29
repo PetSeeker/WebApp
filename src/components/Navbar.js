@@ -23,7 +23,7 @@ export const Navbar = () => {
 
 		async function getUserInfo(token2) {
 			try {
-				const response = await axios.get('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/userInfo', {
+				const response = await axios.get('https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/userInfo', {
 					params: { access_token: token2 }
 				});
 				const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
@@ -54,7 +54,7 @@ export const Navbar = () => {
 				hasLoggedCode.current = true;
 	
 				try {
-					const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/token', { code: code });
+					const response = await axios.post('https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/token', { code: code });
 					// Handle the response data
 					const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
 					const access_token = responseBody.access_token; // Extract the access_token
@@ -124,7 +124,7 @@ export const Navbar = () => {
 		  };
 	  
 		  const response = await axios.post(
-			'https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/verify-and-add-email',
+			'https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/verify-and-add-email',
 			requestData2
 		  );
 	  
@@ -144,7 +144,7 @@ export const Navbar = () => {
 			formData.append('gender', "male");
 		
 			const response = await axios.post(
-			  'https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/user-profile',
+			  'https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/user-profile',
 			  formData
 			);
 		
