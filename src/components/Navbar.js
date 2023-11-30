@@ -23,19 +23,19 @@ export const Navbar = () => {
 
 		async function getUserInfo(token2) {
 			try {
-				const response = await axios.get('https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/userInfo', {
+				console.log("token:", token2);
+				const response = await axios.get('https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/auth/userInfo', {
 					params: { access_token: token2 }
 				});
 				const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
-				const username = responseBody.username; // Extract the username
 				console.log("AQUIIIIIIIIII:", responseBody);
 				// Update the local storage first
-				localStorage.setItem('username', username);
+				localStorage.setItem('username', responseBody.username);
 				localStorage.setItem('email', responseBody.email);
 				sendNot(responseBody.email, username)
 		
 				// Then update the state
-				setUsername(username);
+				setUsername(responseBody.username);
 				setEmail(responseBody.email);
 			} catch (error) {
 				console.error('User Info Request failed:', error);
@@ -43,7 +43,7 @@ export const Navbar = () => {
 		}
 
 		async function fetchData() {
-			checkLocalStorage();
+			await checkLocalStorage();
 			// Get the URLSearchParams from the current URL
 			const searchParams = new URLSearchParams(window.location.search);
 			// Retrieve the 'code' parameter
@@ -52,11 +52,15 @@ export const Navbar = () => {
 			if (code && !hasLoggedCode.current && !localStorage.getItem('access_token')) {
 				// Save the 'code' to your state or perform any actions with it
 				hasLoggedCode.current = true;
+				console.log("RNOWE	");
+				
 	
 				try {
-					const response = await axios.post('https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/token', { code: code });
+					const response = await axios.post('https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/auth/token', { code: code });
 					// Handle the response data
+					console.log('Response Data:', response.data);
 					const responseBody = JSON.parse(response.data.body); // Parse the JSON response body
+					console.log('Response Data:aasdasd', responseBody.access_token);
 					const access_token = responseBody.access_token; // Extract the access_token
 					setToken(access_token);
 					localStorage.setItem('access_token', access_token);
@@ -85,7 +89,7 @@ export const Navbar = () => {
 		setIsAuthenticated(false);
 	}
 
-	function checkLocalStorage() {
+	async function checkLocalStorage() {
 		const storedUsername = localStorage.getItem('username');
 		const storedEmail = localStorage.getItem('email');
 		const storedToken = localStorage.getItem('access_token');
