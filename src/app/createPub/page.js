@@ -6,13 +6,17 @@ import { InputText} from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FileUpload } from 'primereact/fileupload';
 import { InputNumber } from 'primereact/inputnumber';
 import axios from 'axios';
+import { get } from 'http';
 
 export default function CreatePub(){
-
+    const [types, setTypes] = useState([]);
+    const [breeds, setBreeds] = useState([]);
+    const [tokenApiPetFinder, setTokenApiPetFinder] = useState(null);
+    const isMountedRef = useRef(true);
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [age, setAge] = useState(null); // or useState(null);
@@ -48,6 +52,13 @@ export default function CreatePub(){
     //   const [isAuthenticated, setIsAuthenticated] = useState(true); //for local development
 
     const sendData = async () => {
+        let isAdmin = localStorage.getItem('isAdmin');
+        if(isAdmin === 'true'){
+            alert('You are not allowed to create a listing as admin');
+            window.location.href = '/account/admin';
+            return;
+        }
+        const token3 = localStorage.getItem('access_token');
         try {
             const formData = new FormData();
             formData.append('owner_email', email); // Replace with actual owner email
@@ -57,13 +68,22 @@ export default function CreatePub(){
             formData.append('animal_age', age);
             formData.append('location', location);
             formData.append('listing_type', selectedGoal);
+            if (selectedGoal === 'SALE') {
+                formData.append('animal_price', price);
+            }
             formData.append('description', description);
-            formData.append('animal_price', price);
+            // formData.append('animal_price', price);
             // formData.append('images', images);
             // Append each file with the key 'images'
             images.forEach((image, index) => {
-                formData.append('images', image, `image${index}`);
+                formData.append('images', image, `${image.name}`);
             });
+            // images.forEach((image, index) => {
+            //     const imageType = image.type.split('/')[1]; // Extracting the file extension
+            //     const imageNameWithType = `image${index}.${imageType}`;
+            //     formData.append('images', image, imageNameWithType);
+            // });
+            
             
             // Append price only if the listing type is 'sale'
             if (selectedGoal === 'sale') {
@@ -82,19 +102,36 @@ export default function CreatePub(){
             
             try {
                 // Make the API call using axios
-                const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/createListings', formData, {
+                const response = await axios.post('https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/listings', formData, {
                   headers: {
                     'Content-Type': 'multipart/form-data',
                     'Accept': '*/*',
+                    'Authorizer': `${token3}`
                   }
                 });
           
                 // Handle the response
                 console.log('API Response:', response.data);
-                sendNot(name);
+                sendNot(name, selectedType);
+                //window.location.href = '/myListings';
               } catch (error) {
                 // Handle errors
-                console.error('Error making API call:', error);
+                //console.error('Error making API call:', error);
+                if (error.response && error.response.status === 401 && isMountedRef.current) {
+                    // Unauthorized, handle accordingly (e.g., redirect to login)
+                    console.error('Unauthorized request:', error.message);
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('email');
+                    localStorage.removeItem('username'); 
+                    localStorage.removeItem('isAdmin');
+                    alert("You are not authorized to access this page. Please login.");
+                    isMountedRef.current = false;
+                    window.location.href = 'https://main.dzgh2fc7t2w9u.amplifyapp.com/';
+                    
+                  } else {
+                    // Handle other errors
+                    console.error('Error:', error.message);
+                  }
               }
         } catch (error) {
             // Handle errors
@@ -102,16 +139,21 @@ export default function CreatePub(){
         }
       };
 
-      async function sendNot(name){
+      async function sendNot(name, type){
+            const token3 = localStorage.getItem('access_token');
             const data = {
-                "to": email,
-                "subject": "Publication Created",
-                "message": `Your publication of animal: ${name} has been created`
+                "to_list": [email],
+                "subject": "Publication Sent to approvation",
+                "message": `Your publication of animal: ${name} has been send to the Admins for approvation. We will contact you later with the result.`
             }
             console.log("email: ", email)
             try {
                 // Make the API call using axios
-                const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/notification', data);
+                const response = await axios.post('https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/notifications', data, {
+                    headers: {
+                        Authorizer: `${token3}`,
+                    }
+                });
           
                 // Handle the response
                 console.log('API Response:', response.data);
@@ -123,22 +165,123 @@ export default function CreatePub(){
         }
 
         const [selectedType, setSelectedType] = useState(null);
-        const types = [
-            { name: 'Dog', value: 'Dog'},
-            { name: 'Cat', value: 'Cat'},
-        ];
+        // const types = [
+        //     { name: 'Dog', value: 'Dog'},
+        //     { name: 'Cat', value: 'Cat'},
+        //     { name: 'Bird', value: 'Bird'},
+        //     { name: 'Horse', value: 'Horse'},
+        // ];
 
         const [selectedBreed, setSelectedBreed] = useState(null);
-        const breeds = [
-            { name: 'Mutt', value: 'Mutt'},
-            { name: 'Spitz', value: 'Spitz'},
-            { name: 'Husky', value: 'Husky'},
-            { name: 'Labrador', value: 'Labrador'},
-            { name: 'German Shepherd', value: 'German Shepherd'},
-            { name: 'Wild', value: 'Wild'},
-            { name: 'Siamese', value: 'Siamese'},  
-        ];
+        // const breeds = [
+        //     { name: 'Mutt', value: 'Mutt'},
+        //     { name: 'Spitz', value: 'Spitz'},
+        //     { name: 'Husky', value: 'Husky'},
+        //     { name: 'Labrador', value: 'Labrador'},
+        //     { name: 'German Shepherd', value: 'German Shepherd'},
+        //     { name: 'Wild', value: 'Wild'},
+        //     { name: 'Siamese', value: 'Siamese'},  
+        // ];
+
+        useEffect(() => {
+            const postData = {
+                grant_type: 'client_credentials',
+                client_id: 'NNFZ4qehsUtm4ND9wG2SjhIYdz8QWU4MiW1lHAWQvQtt86o5I5',
+                client_secret: 'wHmIyfPrSwKpHwLNOtxBpZe18oVlbAkpD518E6i1',
+            };
+            axios.post('https://api.petfinder.com/v2/oauth2/token', postData)
+                .then((response) => {
+                    console.log(response);
+                    setTokenApiPetFinder(response.data.access_token);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+          }, []);  
         
+        // async function getTokenApiPetFinder() {
+        //     const postData = {
+        //         grant_type: 'client_credentials',
+        //         client_id: 'NNFZ4qehsUtm4ND9wG2SjhIYdz8QWU4MiW1lHAWQvQtt86o5I5',
+        //         client_secret: 'wHmIyfPrSwKpHwLNOtxBpZe18oVlbAkpD518E6i1',
+        //     };
+        //     await axios.post('https://api.petfinder.com/v2/oauth2/token', postData)
+        //         .then((response) => {
+        //             console.log(response);
+        //             setTokenApiPetFinder(response.data.access_token);
+        //         })
+        //         .catch((error) => {
+        //             console.log(error);
+        //         });
+        // }
+
+          useEffect(() => {
+            axios.get('https://api.petfinder.com/v2/types', {
+                    headers: {
+                        Authorization: `Bearer ${tokenApiPetFinder}`,
+                    },
+                })
+                .then((response) => {
+                    console.log(response);
+                    const fetchedTypes = response.data.types.map((type) => ({
+                        name: type.name,
+                        value: type.name,
+                      }));
+                    setTypes(fetchedTypes);
+                      
+                    console.log(fetchedTypes);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    // if (error.response && error.response.status === 401 && isMountedRef.current) {
+                    //     // Unauthorized, handle accordingly (e.g., redirect to login)
+                    //     getTokenApiPetFinder();
+                        
+                    //   }
+                })
+            
+          }, [tokenApiPetFinder]);
+
+          useEffect(() => {
+            if (selectedType === null) {
+                return;
+            }
+            axios.get(`https://api.petfinder.com/v2/types/${selectedType}/breeds`, {
+                    headers: {
+                        Authorization: `Bearer ${tokenApiPetFinder}`,
+                    },
+                })
+                .then((response) => {
+                    console.log(response);
+                    const fetchedTypes = response.data.breeds.map((type) => ({
+                        name: type.name,
+                        value: type.name,
+                      }));
+                    setBreeds(fetchedTypes);
+                      
+                    console.log(fetchedTypes);
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            
+          }, [selectedType]);
+
+        //   useEffect(() => {
+        //     axios.get(`https://app.zipcodebase.com/api/v1/search?codes=${location}`, {
+        //             headers: {
+        //                 apikey: 'ce850980-9465-11ee-83de-27b428bd6727',
+        //             },
+        //         })
+        //         .then((response) => {
+        //             console.log(response);
+        //         })
+        //         .catch((error) => {
+        //             console.log(error);
+        //         })
+            
+        //   }, [location]);
+
     return (
         <>
         
@@ -150,8 +293,8 @@ export default function CreatePub(){
             <AnimatedText text='Create a Publication' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-12 mt-8 '/>
 
             <Layout className='flex items-center justify-center'>
-                <div className='w-1/3 bg-gray-300 bg-opacity-50 border border-solid rounded-xl flex flex-col items-center justify-center p-8 space-y-6 shadow-lg'>
-                    <div className='w-full flex grid grid-cols-2 gap-16'>
+                <div className='lg:w-1/3 md:w-1/2 xs:w-full bg-gray-300 bg-opacity-50 border border-solid rounded-xl flex flex-col items-center justify-center p-8 space-y-6 shadow-lg'>
+                    <div className='w-full grid grid-cols-2 gap-16'>
                         <div className="w-full p-float-label">
                             <InputText id="username" value={name} onChange={(e) => setName(e.target.value)} className='h-12 w-full'  />
                             <label htmlFor="username">Animal Name</label>
@@ -164,20 +307,35 @@ export default function CreatePub(){
                             <label htmlFor="username">Animal Type</label>
                         </div>
                     </div>
-                    <div className='w-full flex grid grid-cols-2 gap-16'>
+                    <div className='w-full grid grid-cols-2 gap-16'>
+                    {selectedType ? (
                         <div className="w-full p-float-label">
-                            {/* <InputText id="username" value={breed} onChange={(e) => setBreed(e.target.value)} className='h-12'/>
-                            <label htmlFor="username">Breed</label> */}
+                        <Dropdown
+                            value={selectedBreed}
+                            onChange={(e) => setSelectedBreed(e.value)}
+                            options={breeds}
+                            optionLabel="name"
+                            placeholder="Select a Breed"
+                            filter
+                            className="w-full h-12"
+                            panelClassName='w-1/5 mt-1'
+                        />
+                        <label htmlFor="username">Animal Breed</label>
+                        </div>
+                    ) : (
+                        <div className="w-full p-float-label"></div>
+                    )}
+                        {/* <div className="w-full p-float-label">
                             <Dropdown value={selectedBreed} onChange={(e) => setSelectedBreed(e.value)} options={breeds} optionLabel="name" placeholder="Select a Breed" 
                             filter className="w-full h-12" panelClassName='w-2 mt-1' />
                             <label htmlFor="username">Animal Breed</label>
-                        </div>
+                        </div> */}
                         <div className="w-full p-float-label">
                             <InputNumber id="number-input" value={age} onChange={(e) => setAge(e.value)} inputClassName='border-none rounded-md h-12 w-full' />
                             <label htmlFor="number-input">Age</label>
                         </div>
                     </div>
-                    <div className='w-full flex grid grid-cols-2 gap-16'>
+                    <div className='w-full  grid grid-cols-2 gap-16'>
                         <div className="p-float-label w-full">
                             <InputText id="username" value={location} onChange={(e) => setLocation(e.target.value)} className='h-12 w-full'/>
                             <label htmlFor="username">Location</label>
@@ -209,7 +367,7 @@ export default function CreatePub(){
                         </div>
                     </div>
                     <div className='w-full'>
-                        <FileUpload name="images" url={'/api/upload'} multiple accept="image/*" maxFileSize={1000000} onSelect={handleFileUpload} emptyTemplate={<p className="w-full m-0">Drag and drop images to here to upload.</p>} />
+                        <FileUpload name="images" url={'/api/upload'} multiple accept="image/*" maxFileSize={10000000000} onSelect={handleFileUpload} emptyTemplate={<p className="w-full m-0">Drag and drop images to here to upload.</p>} />
                     </div>
                     <div className='w-full flex items-center justify-center'>
                         <Button label="Create Listing" icon="pi pi-check" className='p-3 bg-blue-500 text-white hover:bg-white hover:text-blue-500' text raised onClick={sendData}/>

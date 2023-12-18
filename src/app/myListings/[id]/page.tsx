@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import AnimatedText from '@/components/AnimatedText';
 import Layout from '@/components/Layout';
@@ -12,7 +12,7 @@ import { InputNumber } from 'primereact/inputnumber';
 
 export default function SaleID({params}: {params: {id: string}}){
 
-
+    const isMountedRef = useRef<boolean>(true);
     const [listing, setListing] = useState({
         animal_age: '',
         animal_breed: '',
@@ -50,6 +50,12 @@ export default function SaleID({params}: {params: {id: string}}){
 
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     useEffect(() => {
+        const isAdmin = localStorage.getItem('isAdmin');
+        if (isAdmin === 'true') {
+            alert('You are not allowed to access this page as an admin');
+            window.location.href = '/account/admin';
+            return;
+        }
         const token = localStorage.getItem('access_token');
         const email = localStorage.getItem('email');
         setEmail(email);
@@ -63,35 +69,35 @@ export default function SaleID({params}: {params: {id: string}}){
       useEffect(() => {
         // Define the API endpoint
         const apiUrl =
-          `https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/getListingsID?listing_id=${params.id}`;
+          `https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/listings/id/${params.id}`;
     
         // Make the API call using Axios
         axios
           .get(apiUrl)
             .then((response) => {
                 // Set the data in the state
-                const body = JSON.parse(response.data.body);
-                console.log(body.listing);
-                setListing(body.listing);
+                //const body = JSON.parse(response.data.body);
+                console.log(response.data.listing);
+                setListing(response.data.listing);
                 
                 // Set the state variables with the corresponding listing properties
                 // only if they are not already set
-                setName(body.listing.animal_name || '');
-                setType(body.listing.animal_type || '');
-                setBreed(body.listing.animal_breed || '');
-                setAge(parseInt(body.listing.animal_age, 10) || null);
-                setLocation(body.listing.location || '');
-                setSelectedGoal(body.listing.listing_type || '');
+                setName(response.data.listing.animal_name || '');
+                setType(response.data.listing.animal_type || '');
+                setBreed(response.data.listing.animal_breed || '');
+                setAge(parseInt(response.data.listing.animal_age, 10) || null);
+                setLocation(response.data.listing.location || '');
+                setSelectedGoal(response.data.listing.listing_type || '');
                 
     
-                if (body.listing.animal_price === null) {
+                if (response.data.listing.animal_price === null) {
                     console.log("AQUIIIIIII")
                 } else {
-                    setPrice((prevPrice) => (prevPrice !== null ? prevPrice : parseInt(body.listing.animal_price, 10) || null));
+                    setPrice((prevPrice) => (prevPrice !== null ? prevPrice : parseInt(response.data.listing.animal_price, 10) || null));
                     console.log("AQUI É PARA VENDA---")
                 }
     
-                setDescription(body.listing.description || '');
+                setDescription(response.data.listing.description || '');
                 // ... set other state variables
             })
             .catch((error) => {
@@ -131,10 +137,13 @@ export default function SaleID({params}: {params: {id: string}}){
             
             try {
                 // Make the API call using axios
-                const response = await axios.put(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/editListings/${params.id}`, formData, {
+                const token = localStorage.getItem('access_token');
+                console.log(params.id)
+                const response = await axios.put(`https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/listings/${params.id}`, formData, {
                     headers: {
                     'Content-Type': 'multipart/form-data',
                     'Accept': '*/*',
+                    'Authorizer': `${token}`,
                     }
                 });
             
@@ -144,24 +153,45 @@ export default function SaleID({params}: {params: {id: string}}){
                 } catch (error) {
                 // Handle errors
                 console.error('Error making API call:', error);
+                
                 }
             
         } catch (error: any) {
             // Handle errors
-            console.error('API Error:', error.response || error.message || error);
+            //console.error('API Error:', error.response || error.message || error);
+            if (error.response && error.response.status === 401 && isMountedRef.current) {
+                // Unauthorized, handle accordingly (e.g., redirect to login)
+                console.error('Unauthorized request:', error.message);
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('email');
+                localStorage.removeItem('username'); 
+                localStorage.removeItem('isAdmin');
+                alert("You are not authorized to access this page. Please login.");
+                isMountedRef.current = false;
+                window.location.href = 'https://main.dzgh2fc7t2w9u.amplifyapp.com/';
+                
+              } else {
+                // Handle other errors
+                console.error('Error:', error.message);
+              }
         }
         };
         
         async function sendNot(name: string){
+            const token3 = localStorage.getItem('access_token');
             const data = {
-                "to": email,
-                "subject": "Publication Edited",
-                "message": `Your publication of animal: ${name} has been Edited`
+                "to_list": [email],
+                "subject": "Publication Edited and sent to approvation",
+                "message": `Your publication of animal: ${name} has been Edited and sent to approvation.`
             }
             console.log("email: ", email)
             try {
                 // Make the API call using axios
-                const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/notification', data);
+                const response = await axios.post('https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/notifications', data, {
+                    headers: {
+                        Authorizer: `${token3}`,
+                    }
+                });
           
                 // Handle the response
                 console.log('API Response Nots:', response.data);
@@ -172,7 +202,76 @@ export default function SaleID({params}: {params: {id: string}}){
               }
         }
 
+        const [tokenApiPetFinder, setTokenApiPetFinder] = useState(null);
+        const [types, setTypes] = useState([]);
+        const [breeds, setBreeds] = useState([]);
+        useEffect(() => {
+            const postData = {
+                grant_type: 'client_credentials',
+                client_id: 'NNFZ4qehsUtm4ND9wG2SjhIYdz8QWU4MiW1lHAWQvQtt86o5I5',
+                client_secret: 'wHmIyfPrSwKpHwLNOtxBpZe18oVlbAkpD518E6i1',
+            };
+            axios.post('https://api.petfinder.com/v2/oauth2/token', postData)
+                .then((response) => {
+                    console.log(response);
+                    setTokenApiPetFinder(response.data.access_token);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+          }, []);
         
+        useEffect(() => {
+        axios.get('https://api.petfinder.com/v2/types', {
+                headers: {
+                    Authorization: `Bearer ${tokenApiPetFinder}`,
+                },
+            })
+            .then((response) => {
+                console.log(response);
+                const fetchedTypes = response.data.types.map((type: any) => ({
+                    name: type.name,
+                    value: type.name,
+                    }));
+                setTypes(fetchedTypes);
+                    
+                console.log(fetchedTypes);
+            })
+            .catch((error) => {
+                console.log(error);
+                // if (error.response && error.response.status === 401 && isMountedRef.current) {
+                //     // Unauthorized, handle accordingly (e.g., redirect to login)
+                //     getTokenApiPetFinder();
+                    
+                //   }
+            })
+        
+        }, [tokenApiPetFinder]);
+
+        useEffect(() => {
+        if (type === null) {
+            return;
+        }
+        axios.get(`https://api.petfinder.com/v2/types/${type}/breeds`, {
+                headers: {
+                    Authorization: `Bearer ${tokenApiPetFinder}`,
+                },
+            })
+            .then((response) => {
+                console.log(response);
+                const fetchedTypes = response.data.breeds.map((type: any) => ({
+                    name: type.name,
+                    value: type.name,
+                    }));
+                setBreeds(fetchedTypes);
+                    
+                console.log(fetchedTypes);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        
+        }, [type]);
 
     return (
         <>
@@ -184,45 +283,65 @@ export default function SaleID({params}: {params: {id: string}}){
             <AnimatedText text={listing.animal_name} className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-4 mt-8 '/>
             <Layout className='flex items-center justify-center flex-col'>
             <h1 className='text-center underline'>Change what you want about your publication</h1>
-            <div className='w-1/3 bg-gray-300 bg-opacity-50 border border-solid rounded-xl flex flex-col items-center justify-center p-8 space-y-6 shadow-lg'>
-                    <div className='w-full flex'>
-                        <div className="p-float-label w-1/2">
-                            <InputText id="username" value={name} onChange={(e) => setName(e.target.value)} className='h-10'  />
+            <div className='lg:w-1/3 md:w-1/2 xs:w-full bg-gray-300 bg-opacity-50 border border-solid rounded-xl flex flex-col items-center justify-center p-8 space-y-6 shadow-lg'>
+                    <div className='w-full grid grid-cols-2 gap-16 '>
+                        <div className="w-full p-float-label">
+                            <InputText id="username" value={name} onChange={(e) => setName(e.target.value)} className='h-12 w-full'  />
                             <label htmlFor="username">Animal Name</label>
                         </div>
-                        <div className="p-float-label w-1/2">
-                            <InputText id="username" value={type} onChange={(e) => setType(e.target.value)} className='w-full h-10' />
+                        <div className="p-float-label w-full">
+                            {/* <InputText id="username" value={type} onChange={(e) => setType(e.target.value)} className='h-12 w-full' />
+                            <label htmlFor="username">Animal Type</label> */}
+                            <Dropdown value={type} onChange={(e) => setType(e.value)} options={types} optionLabel="name" placeholder="Select a Type" 
+                            filter className="w-full h-12" panelClassName='w-2 mt-1' />
                             <label htmlFor="username">Animal Type</label>
                         </div>
                     </div>
-                    <div className='w-full flex'>
-                        <div className="p-float-label w-1/2">
-                            <InputText id="username" value={breed} onChange={(e) => setBreed(e.target.value)} className='h-10'/>
+                    <div className='w-full grid grid-cols-2 gap-16'>
+                        {/* <div className="w-full p-float-label">
+                            <InputText id="username" value={breed} onChange={(e) => setBreed(e.target.value)} className='h-12 w-full'/>
                             <label htmlFor="username">Breed</label>
+                        </div> */}
+                        {type ? (
+                        <div className="w-full p-float-label">
+                        <Dropdown
+                            value={breed}
+                            onChange={(e) => setBreed(e.value)}
+                            options={breeds}
+                            optionLabel="name"
+                            placeholder="Select a Breed"
+                            filter
+                            className="w-full h-12"
+                            panelClassName='w-1/5 mt-1'
+                        />
+                        <label htmlFor="username">Animal Breed</label>
                         </div>
-                        <div className="w-1/2 p-float-label">
-                            <InputNumber id="number-input" value={age} onChange={(e) => setAge(e.value)} />
+                    ) : (
+                        <div className="w-full p-float-label"></div>
+                    )}
+                        <div className="w-full p-float-label">
+                            <InputNumber id="number-input" value={age} onChange={(e) => setAge(e.value)} inputClassName='border-none rounded-md h-12 w-full' />
                             <label htmlFor="number-input">Age</label>
                         </div>
                     </div>
-                    <div className='w-full flex'>
-                        <div className="p-float-label w-1/2">
-                            <InputText id="username" value={location} onChange={(e) => setLocation(e.target.value)} className='h-10'/>
+                    <div className='w-full  grid grid-cols-2 gap-16'>
+                        <div className="p-float-label w-full">
+                            <InputText id="username" value={location} onChange={(e) => setLocation(e.target.value)} className='h-12 w-full'/>
                             <label htmlFor="username">Location</label>
                         </div>
                     </div>
-                    <div className='w-full flex'>
+                    <div className='w-full grid grid-cols-2 gap-16'>
                         {/* <div className="w-1/2">
                             <Dropdown value={selectedSize} onChange={(e) => setSelectedSize(e.value)} options={sizes} optionLabel="name" 
                             placeholder="Select a Size" className='h-2/3' />
                         </div> */}
-                        <div className='w-1/2'>
+                        <div className='w-full p-float-label'>
                             <Dropdown value={selectedGoal} onChange={(e) => setSelectedGoal(e.value)} options={goals} optionLabel="name" 
-                            placeholder="Sale/Adoption" className='h-full'/>
+                            placeholder="Sale/Adoption" className='h-12 w-full'/>
                         </div>
                         { selectedGoal === 'SALE' ? (
-                            <div className="p-float-label w-1/2">
-                                <InputNumber id="number-input" value={price || 0} onChange={(e) => setPrice(e.value)} />
+                            <div className="p-float-label w-full">
+                                <InputNumber id="number-input" value={price || 0} onChange={(e) => setPrice(e.value)} inputClassName='border-none rounded-md h-12 w-full' />
                                 <label htmlFor="number-input">Price</label>
                             </div> ) : <></>
                         }

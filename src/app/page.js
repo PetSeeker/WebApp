@@ -8,13 +8,19 @@ import Bird from '../../public/images/bird3.png'
 import Horse from '../../public/images/horse.png'
 import Services from '../../public/images/services.png'
 import Team from '../../public/images/team.png'
-import Animalpurchase from '../../public/images/animalpurchase.png'
+import Animalpurchase from '../../public/images/animalpurchase-removebg-preview.png'
 import Animaladopt from '../../public/images/animaladopt.png'
 import Animallost from '../../public/images/animallost1.jpeg'
 import Animaldescription from '../../public/images/animaldescription.png'
 import Customersupport from '../../public/images/customersupport1.png'
 import Developer from '../../public/images/developer.png'
 import Question from '../../public/images/question3.png'
+import Ratings from '../../public/images/rating2-removebg-preview.png'
+import user1 from '../../public/images/user1.jpeg'
+import user2 from '../../public/images/user2.png'
+import user3 from '../../public/images/user3.jpg'
+import user4 from '../../public/images/user4.png'
+import user5 from '../../public/images/user5.jpg'
 import { TabView, TabPanel } from 'primereact/tabview';
 import 'primeicons/primeicons.css';
 import { Card } from 'primereact/card';
@@ -36,10 +42,22 @@ export default function Home() {
     <Image alt="Card" src={Animaldescription} />
   );
   const header5 = (
-    <Image alt="Card" src={Customersupport} />
+    <Image alt="Card" src={Ratings} className='mb-16 translate-y-8' />
   );
   const header6 = (
-    <Image alt="Card" src={Developer} />
+    <Image alt="Card" src={user3} className=' w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid mt-4' />
+  );
+  const header7 = (
+    <Image alt="Card" src={user1} className=' w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid mt-4' />
+  );
+  const header8 = (
+    <Image alt="Card" src={user4} className=' w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid mt-4'/>
+  );
+  const header9 = (
+    <Image alt="Card" src={user5} className=' w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid mt-4' />
+  );
+  const header10 = (
+    <Image alt="Card" src={user2} className=' w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid mt-4' />
   );
 
   const fadeInVariants = {
@@ -84,7 +102,6 @@ export default function Home() {
 
   return (
     <> 
-      
       <Layout className='flex items-center justify-center flex-col bg-[url("../../public/images/imageteste.png")] bg-no-repeat bg-cover bg-center'>
       <AnimatedText text='PetSeeker' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-16 mt-8 '/>
       
@@ -93,7 +110,7 @@ export default function Home() {
         </div>
         <div className='w-full flex flex-row mt-4 space-x-4'>
           <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2 shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105 hover:border-blue-400 '>
-            <a href='/'>
+            {/* <a href='/'> */}
               <motion.div className="flex flex-col items-center" variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
                 <Image
                 className='w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid'
@@ -102,12 +119,12 @@ export default function Home() {
                 alt="Dog"
                 />
                 <h5 className="text-sm font-medium text-gray-900 dark:text-white">Dogs</h5>
-                <span className="text-sm text-gray-500 dark:text-gray-400">Search</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400"></span>
               </motion.div>
-            </a> 
+            {/* </a>  */}
           </div>
           <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2  shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105 hover:border-blue-400'>
-            <a href='/'>
+            {/* <a href='/'> */}
               <motion.div className="flex flex-col items-center" variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
                 <Image
                 className='w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid'
@@ -116,12 +133,12 @@ export default function Home() {
                 alt="Cat"
                 />
                 <h5 className="text-sm font-medium text-gray-900 dark:text-white">Cats</h5>
-                <span className="text-sm text-gray-500 dark:text-gray-400">Search</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400"></span>
               </motion.div>
-            </a>  
+            {/* </a>   */}
           </div>
           <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2 shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105 hover:border-blue-400'>
-            <a href='/'>
+            {/* <a href='/'> */}
               <motion.div className="flex flex-col items-center" variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
                 <Image
                 className='w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid'
@@ -130,12 +147,12 @@ export default function Home() {
                 alt="Bird"
                 />
                 <h5 className="text-sm font-medium text-gray-900 dark:text-white">Birds</h5>
-                <span className="text-sm text-gray-500 dark:text-gray-400">Search</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400"></span>
               </motion.div>
-            </a>       
+            {/* </a>        */}
           </div>
           <div className='w-1/4 flex flex-col mt-2 bg-sage2 bg-opacity-80 p-2 shadow-xl shadow-white border border-solid rounded-2xl hover:scale-105 hover:border-blue-400'>
-            <a href='/'>
+            {/* <a href='/'> */}
               <motion.div className="flex flex-col items-center" variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
                 <Image
                 className='w-32 h-32 mb-2 rounded-full shadow-lg object-cover border-2 border-solid'
@@ -144,67 +161,22 @@ export default function Home() {
                 alt="Horse"
                 />
                 <h5 className="text-sm font-medium text-gray-900 dark:text-white">Horses</h5>
-                <span className="text-sm text-gray-500 dark:text-gray-400">Search</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400"></span>
               </motion.div>
-            </a>  
+            {/* </a>   */}
           </div>
         </div>
-        <div className='w-full flex items-center justify-center mt-8 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-2xl text-white'>
-         <Button label="Other animals" severity="secondary" rounded className='p-2 shadow-lg shadow-white hover:scale-105 bg-sage2 bg-opacity-80'/>
+        <div className='w-full flex items-center justify-center drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-gray-300 mt-6'>
+          <h3>and much more ...</h3>
         </div>
-        {/* <div id='aboutus' className='w-full flex font-bold text-4xl drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] items-center justify-center mt-8 text-gray-300'>
-          About Our App
-        </div> */}
-        {/* <div className='w-full flex flex-col bg-blue-200 bg-opacity-75 border border-solid rounded-2xl p-8 mt-4 shadow-xl shadow-blue-300 text-center'>
-          <div className='w-full flex flex-col hover:scale-105 items-center justify-center bg-blue-300 bg-opacity-25 border-2 rounded-lg p-4'>
-            <motion.h2 className='text-xl mb-4 underline decoration-sky-500'
-            variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}
-            >Welcome to <b className=''>PetSeeker</b>, where your journey to find the perfect animal companion begins.</motion.h2>
-            <motion.h2 className='text-lg'
-            variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}
-            >We are more than just a platform, we are your partner in creating lifelong bonds and unforgettable memories.</motion.h2>
-            <motion.h2 className='text-lg'  
-            variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}
-            >Our mission is to make the process of buying or adopting animals as joyful and seamless as possible. We are here to help you find the ideal furry friend, feathered companion, or scaly buddy that fits your lifestyle and fills your heart with love.</motion.h2> 
-          </div>  
-          <h1 className='text-2xl text-gray-500 mt-4 font-semibold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-2'> What set us apart from others:</h1>
-          <motion.div className='w-full flex hover:scale-105 items-center justify-center bg-blue-200 bg-opacity-0'
-          variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}
-          >
-            <TabView panelContainerClassName='shadow-md shadow-blue-500'>
-              <TabPanel header="1st Point" leftIcon="pi pi-star mr-2" headerClassName='' >
-                  <p className="m-0 text-center">
-                  A wide variety of animals available for purchase and adoption.
-                  </p>
-              </TabPanel>
-              <TabPanel header="2nd Point" leftIcon="pi pi-star mr-2">
-                  <p className="m-0 text-center">
-                  Comprehensive profiles and information to help you make informed decisions.
-                  </p>
-              </TabPanel>
-              <TabPanel header="3rd Point" leftIcon="pi pi-star mr-2">
-                  <p className="m-0 text-center">
-                  A community that shares your passion for responsible pet ownership.
-                  </p>
-              </TabPanel>
-              <TabPanel header="4rd Point" leftIcon="pi pi-star mr-2">
-                  <p className="m-0 text-center">
-                  A user-friendly and secure platform designed with your convenience in mind.
-                  </p>
-              </TabPanel>
-              <TabPanel header="5rd Point" leftIcon="pi pi-star mr-2">
-                  <p className="m-0 text-center">
-                  24 hour support from dedicated and knowledgeable people
-                  </p>
-              </TabPanel>
-          </TabView>
-          
-          </motion.div> 
-          <p className="text-gray-600 mt-6 text-lg drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">Join us in this journey of love, compassion, and the joy of finding your perfect animal companion. Your next adventure awaits!</p>  
-        </div>  */}
+        <div className='w-full flex items-center justify-center mt-8 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-2xl text-white'>
+          <a href='/animals'>
+          <Button label="See our animals" severity="secondary" rounded className='p-2 shadow-lg shadow-white hover:scale-105 bg-sage2 bg-opacity-80'/>
+          </a>
+        </div>
         </Layout>
-        <Layout className='flex bg-light'>
-          <motion.div className='w-2/3 flex-col bg-gray-200 p-12 space-y-4 border border-solid rounded-2xl hover:border-blue-500 text-xl
+        <Layout className='flex bg-light items-center justify-center'>
+          <motion.div id="aboutus" className='w-2/3 flex-col bg-gray-200 p-12 space-y-4 border border-solid rounded-2xl hover:border-blue-500 text-xl
           shadow-md shadow-yellow-950 hover:scale-105' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
             <h1 className='text-4xl font-bold mb-8'>Have one of the following questions? Our app is perfect for you!</h1>
             <ul className='list-disc space-y-4 underline decoration-yellow-700'>
@@ -216,124 +188,109 @@ export default function Home() {
             </ul>
             
           </motion.div>
-          <motion.div className='w-1/3 translate-y-12' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
+          {/* <motion.div className='w-1/3 translate-y-12' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
             <Image
             className='w-2/3 ml-32'
             src={Question}
             priority={true}
             alt="Questions Image"
             />
-          </motion.div>
+          </motion.div> */}
         </Layout>
         <hr/>
         <Layout className='flex items-center justify-center bg-gray-200'>
-        {/* <Layout className='flex bg-[url("../../public/images/garden.png")] bg-no-repeat bg-cover bg-center items-center justify-center'> */}
-          {/* <motion.div className='w-1/3' variants={fadeOpacity} initial="initial" whileInView="animate" viewport={{once:true,}}>
-            <Image
-            className=''
-            src={Services}
-            priority={true}
-            alt="Services"
-            />
-          </motion.div> */}
-          <div className='w-2/3 flex-col'>
+          <div id="services" className='w-2/3 flex-col'>
             <h1 className='text-4xl text-center font-bold'> Our Services</h1>
             <motion.div className='w-full flex mt-8' variants={fadeInVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
-              <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Pet Purchase" header={header1} className="h-full text-center">
-                  <p className="m-0 text-center">
-                  Search for a wide variety of animals and purchase them from trusted breeders and licensed sellers.
-                  </p>
-                </Card>
-              </div>
-              <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Animal Adoption" header={header2} className="h-full text-center">
-                  <p className="m-0 text-center">
-                  Discover and adopt a wide variety of animals 
-                  </p>
-                </Card>
-              </div>
-              <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Help Lost Animals" header={header3} className="h-full text-center">
-                  <p className="m-0 text-center">
-                  Help reunite lost animals with their owners or find new homes for them
-                  </p>
-                </Card>
-              </div>
-              <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Animal Profiles" header={header4} className="h-full text-center">
-                  <p className="m-0 text-center">
-                  Explore detailed profiles of animals, complete with photos and descriptions.
-                  </p>
-                </Card>
-              </div>
-              <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Custommer Support" header={header5} className="h-full text-center">
-                  <p className="m-0 text-center">
-                  Access our customer support and help resources for a smooth experience.
-                  </p>
-                </Card>
+              <div className='w-full grid lg:grid-cols-5 md:grid-cols-3 xs:grid-cols-2 gap-2 '>
+                <div className='w-full mx-2 hover:scale-105'>
+                  <Card title="Pet Purchase" header={header1} className="h-full text-center p-2">
+                    <p className="m-0 text-center">
+                    Search for a wide variety of animals and purchase them from trusted breeders and licensed sellers
+                    </p>
+                  </Card>
+                </div>
+                <div className='w-full mx-2 hover:scale-105'>
+                  <Card title="Animal Adoption" header={header2} className="h-full text-center p-2">
+                    <p className="m-0 text-center">
+                    Discover and adopt a wide variety of animals 
+                    </p>
+                  </Card>
+                </div>
+                <div className='w-full mx-2 hover:scale-105'>
+                  <Card title="Help Lost Animals" header={header3} className="h-full text-center p-2">
+                    <p className="m-0 text-center">
+                    Help reunite lost animals with their owners or find new homes for them
+                    </p>
+                  </Card>
+                </div>
+                <div className='w-full mx-2 hover:scale-105'>
+                  <Card title="Animal Profiles" header={header4} className="h-full text-center p-2">
+                    <p className="m-0 text-center">
+                    Explore detailed profiles of animals, complete with photos and descriptions
+                    </p>
+                  </Card>
+                </div>
+                <div className='w-full mx-2 hover:scale-105 items-center'>
+                  <Card title="Rating System" header={header5} className="w-full h-full text-center p-2">
+                    <p className="m-0 text-center">
+                    Take advantage of our user profile and ratings system to make your best choice
+                    </p>
+                  </Card>
+                </div>
               </div>
             </motion.div>
           </div>
         </Layout>
         <hr/>
         <Layout className='flex bg-light items-center justify-center'>
-          <div className='w-2/3 flex-col'>
+          <div id="contacts" className='w-2/3 flex-col'>
             <h1 className='text-4xl text-center font-bold'> Our Team</h1>
             <motion.div className='w-full flex mt-8 items-center justify-center' variants={fadeInVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
-              <div className='w-1/4 mx-2 hover:scale-105 '>
-                <Card title="Tiago Bastos" header={header6} className="">
-                  <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem'}}></i></a>
-                  <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                  <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                  <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                </Card>
-              </div>
-              <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Miguel Tavares" header={header6} className="">
-                  <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
-                  <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                  <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                  <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                </Card>
-              </div>
-              <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="João Torrinhas" header={header6} className="">
-                  <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
-                  <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                  <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                  <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                </Card>
-              </div>
-            </motion.div>
-            <motion.div className='w-full flex mt-4 items-center justify-center' variants={fadeInVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
-              <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="Diogo Torrinhas" header={header6} className="">
-                  <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
-                  <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                  <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                  <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                </Card>
-              </div>
-              <div className='w-1/4 mx-2 hover:scale-105'>
-                <Card title="David Raposo" header={header6} className="">
-                  <a href='www.facebook.com'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
-                  <a href='www.instagram.com'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                  <a href='www.linkedin.com'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                  <a href='www.github.com'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
-                </Card>
+              <div className='w-full grid lg:grid-cols-5 md:grid-cols-3 gap-2 text-center'>
+                <div className='w-full mx-2 hover:scale-105 text-center items-center justify-center'>
+                  <Card title="Tiago Bastos" header={header6} className="flex flex-col text-center items-center justify-center"  style={{ height: '350px' }}>
+                    <a href='https://www.facebook.com/' target='_blank'><i className="pi pi-facebook" style={{ fontSize: '1.5rem'}}></i></a>
+                    <a href='https://www.instagram.com/' target='_blank'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                    <a href='https://pt.linkedin.com/' target='_blank'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                    <a href='https://github.com/' target='_blank'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  </Card>
+                </div>
+                <div className='w-full mx-2 hover:scale-105'>
+                  <Card title="Miguel Tavares" header={header7} className="flex flex-col text-center items-center justify-center" style={{ height: '350px' }}>
+                    <a href='https://www.facebook.com/' target='_blank'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
+                    <a href='https://www.instagram.com/' target='_blank'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                    <a href='https://pt.linkedin.com/' target='_blank'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                    <a href='https://github.com/' target='_blank'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  </Card>
+                </div>
+                <div className='w-full mx-2 hover:scale-105'>
+                  <Card title="João Torrinhas" header={header8} className="flex flex-col text-center items-center justify-center" style={{ height: '350px' }}>
+                    <a href ='https://www.facebook.com/' target='_blank'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
+                    <a href='https://www.instagram.com/' target='_blank'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                    <a href='https://pt.linkedin.com/' target='_blank'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                    <a href='https://github.com/ ' target='_blank'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  </Card>
+                </div>
+                <div className='w-full mx-2 hover:scale-105'>
+                  <Card title="Diogo Torrinhas" header={header9} className="flex flex-col text-center items-center justify-center" style={{ height: '350px' }}>
+                    <a href='https://www.facebook.com/' target='_blank'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
+                    <a href='https://www.instagram.com/' target='_blank'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                    <a href='https://pt.linkedin.com/ ' target='_blank'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                    <a href='https://github.com/' target='_blank'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  </Card>
+                </div>
+                <div className='w-full mx-2 hover:scale-105'>
+                  <Card title="David Raposo" header={header10} className="flex flex-col text-center items-center justify-center" style={{ height: '350px' }}>
+                    <a href='https://www.facebook.com/' target='_blank'><i className="pi pi-facebook" style={{ fontSize: '1.5rem' }}></i></a>
+                    <a href='https://www.instagram.com/' target='_blank'><i className="pi pi-instagram" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                    <a href='https://pt.linkedin.com/' target='_blank'><i className="pi pi-linkedin" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                    <a href='https://github.com/' target='_blank'><i className="pi pi-github" style={{ fontSize: '1.5rem', marginLeft: '0.5rem'}}></i></a>
+                  </Card>
+                </div>
               </div>
             </motion.div>
           </div>
-          {/* <motion.div className='w-1/3 mt-16 items-center justify-center' variants={fadeOutVariants} initial="initial" whileInView="animate" viewport={{once:true,}}>
-            <Image
-            className=''
-            src={Team}
-            priority={true}
-            alt="Team"
-            />
-          </motion.div> */}
         </Layout>
     
     </>

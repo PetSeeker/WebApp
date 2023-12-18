@@ -6,6 +6,7 @@ import { PrimeReactProvider } from 'primereact/api';
 import 'primereact/resources/themes/lara-light-blue/theme.css';
 import { Footer } from '../components/Footer.js';
 import 'primeicons/primeicons.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const inter = Inter({ subsets: ['latin'] })

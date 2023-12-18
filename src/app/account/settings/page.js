@@ -12,12 +12,14 @@ export default function AccountSettings(){
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     const [email, setEmail] = useState('');
     const [notification_preference, setNotification_preference] = useState('0');
+    const isMountedRef = useRef(true);
     const handleToggle = () => {
         setIsToggled(!isToggled);
     };
     const [isLoading, setIsLoading] = useState(true);
 
     const handleApply = async () => {
+        const token = localStorage.getItem('access_token');
         console.log("Estado atualizado:", isToggled);
 
         // Define requestData before the try block
@@ -45,17 +47,46 @@ export default function AccountSettings(){
             // Now, requestData should be updated
             console.log("email para enviar:", requestData.email);
             console.log("notification_preference para enviar:", requestData.notification_preference);
-    
+            console.log("token para enviar:", token);
             // Proceed with your API call
-            const response = await axios.put('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/update-notifications', requestData);
+            const response = await axios.put(
+                `https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/notifications/preference/${requestData.email}?notification_preference=${requestData.notification_preference}`,
+                null,
+                {
+                  headers: {
+                    Authorizer: `${token}`,  // Use Authorizer instead of Authorization
+                  }
+                }
+              );
             console.log('Resposta:', response);
             window.location.reload();
         } catch (error) {
-            console.error('Erro a ativar/desativar notificações', error);
+            console.log("Erro:", error);
+            if (error.response && error.response.status === 401 && isMountedRef.current) {
+                // Unauthorized, handle accordingly (e.g., redirect to login)
+                console.error('Unauthorized request:', error.message);
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('email');
+                localStorage.removeItem('username'); 
+                localStorage.removeItem('isAdmin');
+                alert("You are not authorized to access this page. Please login.");
+                isMountedRef.current = false;
+                window.location.href = 'https://main.dzgh2fc7t2w9u.amplifyapp.com/';
+                
+              } else {
+                // Handle other errors
+                console.error('Error:', error.message);
+              }
         }
     };
 
     useEffect(() => {
+        const isAdmin = localStorage.getItem('isAdmin');
+        if (isAdmin === 'true') {
+            alert('You are not allowed to access this page as an admin.');
+            window.location.href = '/account/admin';
+            return;
+        }
         const token = localStorage.getItem('access_token');
         const email2 = localStorage.getItem('email');
         setEmail(email2);
@@ -65,7 +96,11 @@ export default function AccountSettings(){
             setIsAuthenticated(false);
         }
         console.log("Email:", email2);
-        axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/usernotificationpreference/${email2}`)
+        axios.get(`https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/notifications/preference/${email2}`, {
+            headers: {
+                Authorizer: `${token}`,
+            }
+        })
             .then((response) => {
                 console.log("Resposta:", response.data.users[0].notification_preference);
                 if (response.data.users[0].notification_preference === 1) {
@@ -75,7 +110,22 @@ export default function AccountSettings(){
                 }
             })
             .catch((error) => {
-                console.log("Erro:", error);
+                //console.log("Erro:", error);
+                if (error.response && error.response.status === 401 && isMountedRef.current) {
+                    // Unauthorized, handle accordingly (e.g., redirect to login)
+                    console.error('Unauthorized request:', error.message);
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('email');
+                    localStorage.removeItem('username'); 
+                    localStorage.removeItem('isAdmin');
+                    alert("You are not authorized to access this page. Please login.");
+                    isMountedRef.current = false;
+                    window.location.href = 'https://main.dzgh2fc7t2w9u.amplifyapp.com/';
+                    
+                  } else {
+                    // Handle other errors
+                    console.error('Error:', error.message);
+                  }
             })
             .finally(() => {
                 // Set loading state to false when the API call is complete
@@ -94,7 +144,7 @@ export default function AccountSettings(){
         <>
         <AnimatedText text='Account Settings' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-8 mt-8 '/>
         <Layout className='flex items-center justify-center'>
-            <div className='w-2/3 border border-solid rounded-xl bg-white flex-col p-4 shadow-lg'>
+            <div className='lg:w-2/3  xs:w-full border border-solid rounded-xl bg-white flex-col p-4 shadow-lg'>
                 <div className='w-full flex items-center justify-center flex-row '>
                     <div className='w-1/5'>
                         <FaRegBell className='text-3xl'/>

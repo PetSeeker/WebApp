@@ -1,7 +1,7 @@
 "use client";
 import AnimatedText from '@/components/AnimatedText';
 import Layout from '@/components/Layout';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import imagexample from '../../../../../public/images/userdefault1.png';
@@ -10,6 +10,8 @@ import { Button } from 'primereact/button';
 import { Rating } from 'primereact/rating';
 import Rating2 from '@mui/material/Rating';
 import { ProgressBar } from 'primereact/progressbar';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 export default function ProfileID({params}: {params: {id: string}}){
 
@@ -35,18 +37,28 @@ export default function ProfileID({params}: {params: {id: string}}){
     const [ratingID, setRatingID] = useState('');
     const [editRating, setEditRating] = useState(0);
     const [ratingsCount, setRatingsCount] = useState(0);
-
+    const [token, setToken] = useState('');
+    const isMountedRef = useRef(true);
     useEffect(() => {
         const storedEmail = localStorage.getItem('email');
+        const storedToken = localStorage.getItem('access_token'); 
         if (storedEmail) {
             setEmail(storedEmail);
         }
+        if (storedToken) {
+            setToken(storedToken);
+        }
+        
     }, []);
 
     useEffect(() => {
-        axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/get-user/${params.id}`)
+        const token = localStorage.getItem('access_token');
+        const email = localStorage.getItem('email');
+        console.log("AQUIIIIIIIIIII", token);
+        let id = decodeURIComponent(params.id);
+        axios.get(`https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/profile/${id}`)
             .then((response) => {
-                // console.log("Resposta info utilizador:", response.data);
+                console.log("Resposta info utilizador:", response.data);
                 if(response.data.firstName !== null){
                     setFirstName(response.data.first_name);
                 }
@@ -64,14 +76,50 @@ export default function ProfileID({params}: {params: {id: string}}){
                 }
                 setImage(response.data.image[0]);
                 setInterests(response.data.interests);
-                
+                console.log("AQUIIII:", response.data.interests )
+                axios.get(`https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/ratings?user_email=${response.data.email}&rater_email=${email}`, {
+                    headers: {
+                        Authorizer: `${token}`,
+                    }
+                })
+                .then((response) => {
+                    console.log("Resposta, ja deu rating?", response.data);
+                    if(response.data.rating_id === null){
+                        setGiveRating(false);
+                        
+                    } else {
+                        setGiveRating(true);
+                        setRatingID(response.data.rating_id);
+                    }
+                })
+                .catch((error) => {
+                    // console.log("Erro:", error);
+                    if (error.response && error.response.status === 401 && isMountedRef.current) {
+                        // Unauthorized, handle accordingly (e.g., redirect to login)
+                        console.error('Unauthorized request:', error.message);
+                        
+                        
+                      } else {
+                        // Handle other errors
+                        console.error('Error:', error.message);
+                      }
+                })
   
             })
             .catch((error) => {
-                console.log("Erro:", error);
+                //console.log("Erro:", error);
+                if (error.response && error.response.status === 401 && isMountedRef.current) {
+                    // Unauthorized, handle accordingly (e.g., redirect to login)
+                    console.error('Unauthorized request:', error.message);
+                   
+                    
+                  } else {
+                    // Handle other errors
+                    console.error('Error:', error.message);
+                  }
             })
 
-        axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings/user/${params.id}`)
+        axios.get(`https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/ratings/user/${id}`)
             .then((response) => {
                 console.log("Resposta info ratings", response.data);
                 if(response.data.average_rating === null){
@@ -112,46 +160,66 @@ export default function ProfileID({params}: {params: {id: string}}){
             })
             .catch((error) => {
                 console.log("Erro:", error);
+                if (error.response && error.response.status === 401 && isMountedRef.current) {
+                    // Unauthorized, handle accordingly (e.g., redirect to login)
+                    console.error('Unauthorized request:', error.message);
+                    
+                    
+                  } else {
+                    // Handle other errors
+                    console.error('Error:', error.message);
+                  }
             })
         
-      }, []);
+      }, [token,email,emailUser, params.id]);
 
-      
-        useEffect(() => {
-            console.log("AQUIIII:", emailUser )
-            axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings?user_email=${emailUser}&rater_email=${email}`)
-            .then((response) => {
-                console.log("Resposta, ja deu rating?", response.data);
-                if(response.data.rating_id === null){
-                    setGiveRating(false);
-                } else {
-                    setGiveRating(true);
-                    setRatingID(response.data.rating_id);
-                }
-            })
-            .catch((error) => {
-                console.log("Erro:", error);
-            })
-        }, [email, emailUser]);
 
     async function sendRating() {
+        let username = localStorage.getItem('username');
+        if(username === 'adminpetseeker'){
+            alert('You are not allowed to rating as admin');
+            setVisible2(false);
+            setRatingValue(0);
+            return;
+        }
         const formData = new FormData();
-        formData.append('user_email', email);
+        console.log("user_email:", emailUser);
+        console.log("rater_email:", email);
+        formData.append('user_email', emailUser);
         formData.append('rating', ratingValue.toString());
-        formData.append('rater_email', emailUser);
+        formData.append('rater_email', email);
         // Log FormData entries
         formData.forEach((value, key) => {
             console.log(`${key}: ${value}`);
         });
         
-        axios.post(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings`, formData)
+        axios.post(`https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/ratings`, formData, {
+            headers: {
+                Authorizer: `${token}`,
+            }
+        })
         .then((response) => {
             console.log("Resposta info criar rating", response.data);
             setVisible(false);
             window.location.reload();
         })
         .catch((error) => {
-            console.log("Erro:", error);
+            //console.log("Erro:", error);
+            if (error.response && error.response.status === 401 && isMountedRef.current) {
+                // Unauthorized, handle accordingly (e.g., redirect to login)
+                console.error('Unauthorized request:', error.message);
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('email');
+                localStorage.removeItem('username'); 
+                localStorage.removeItem('isAdmin');
+                alert("You are not authorized to access this page. Please login.");
+                isMountedRef.current = false;
+                window.location.href = 'https://main.dzgh2fc7t2w9u.amplifyapp.com/';
+                
+              } else {
+                // Handle other errors
+                console.error('Error:', error.message);
+              }
         })
     }
 
@@ -159,14 +227,33 @@ export default function ProfileID({params}: {params: {id: string}}){
         console.log("EditRating:", editRating);
         const formData = new FormData();
         formData.append('rating', editRating.toString());
-        await axios.put(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings/${ratingID}`, formData)
+        await axios.put(`https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/ratings/${ratingID}`, formData, {
+            headers: {
+                Authorizer: `${token}`,
+            }
+        })
             .then((response) => {
                 console.log(response.data);
                 setVisible(false);
                 window.location.reload();
             })
             .catch((error) => {
-                console.log("Erro:", error);
+                //console.log("Erro:", error);
+                if (error.response && error.response.status === 401 && isMountedRef.current) {
+                    // Unauthorized, handle accordingly (e.g., redirect to login)
+                    console.error('Unauthorized request:', error.message);
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('email');
+                    localStorage.removeItem('username'); 
+                    localStorage.removeItem('isAdmin');
+                    alert("You are not authorized to access this page. Please login.");
+                    isMountedRef.current = false;
+                    window.location.href = 'https://main.dzgh2fc7t2w9u.amplifyapp.com/';
+                    
+                  } else {
+                    // Handle other errors
+                    console.error('Error:', error.message);
+                  }
             })
     }
 
@@ -175,27 +262,66 @@ export default function ProfileID({params}: {params: {id: string}}){
         if (!confirmed) {
             window.location.reload();
         } else {
-            await axios.delete(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings/${ratingID}`)
+            await axios.delete(`https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/ratings/${ratingID}`, {
+                headers: {
+                    Authorizer: `${token}`,
+                }
+            })
             .then((response) => {
                 console.log(response.data);
                 setVisible(false);
                 window.location.reload();
             })
             .catch((error) => {
-                console.log("Erro:", error);
+                //console.log("Erro:", error);
+                if (error.response && error.response.status === 401 && isMountedRef.current) {
+                    // Unauthorized, handle accordingly (e.g., redirect to login)
+                    console.error('Unauthorized request:', error.message);
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('email');
+                    localStorage.removeItem('username'); 
+                    localStorage.removeItem('isAdmin');
+                    alert("You are not authorized to access this page. Please login.");
+                    isMountedRef.current = false;
+                    window.location.href = 'https://main.dzgh2fc7t2w9u.amplifyapp.com/';
+                    
+                  } else {
+                    // Handle other errors
+                    console.error('Error:', error.message);
+                  }
             })
         } 
     }
 
     async function getRatingIDValue(ratingID: string) {
-        await axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/ratings/${ratingID}`)
+        console.log("TOKEN", token);
+        await axios.get(`https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/ratings/${ratingID}`, {
+            headers: {
+                Authorizer: `${token}`,
+            }
+        })
             .then((response) => {
-                console.log(response.data["Rating retrieved successfully"]);
-                setEditRating(response.data["Rating retrieved successfully"]);
+                console.log(response.data.rating)
+                setEditRating(response.data.rating);
                 
             })
             .catch((error) => {
-                console.log("Erro:", error);
+                //console.log("Erro:", error);
+                if (error.response && error.response.status === 401 && isMountedRef.current) {
+                    // Unauthorized, handle accordingly (e.g., redirect to login)
+                    console.error('Unauthorized request:', error.message);
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('email');
+                    localStorage.removeItem('username'); 
+                    localStorage.removeItem('isAdmin');
+                    alert("You are not authorized to access this page. Please login.");
+                    isMountedRef.current = false;
+                    window.location.href = 'https://main.dzgh2fc7t2w9u.amplifyapp.com/';
+                    
+                  } else {
+                    // Handle other errors
+                    console.error('Error:', error.message);
+                  }
             })
     }
 
@@ -203,12 +329,12 @@ export default function ProfileID({params}: {params: {id: string}}){
         <>
             <AnimatedText text='User Profile' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-8 mt-8 '/> 
             <Layout className='flex items-center justify-center'>
-                <div className='w-3/4 grid grid-cols-3 gap-4 p-2 rounded-xl'>
-                    <div className='w-full border-2 shadow-md p-4 grid grid-col-1 gap-2 items-center justify-center
+                <div className='lg:w-3/4 md:w-full sm:w-full grid lg:grid-cols-3 md:grid-cols-3 xs:grid-cols-1  gap-4 p-2 rounded-xl'>
+                    <div className='w-full border-2 shadow-md p-4 grid grid-col-1 gap-2 text-center items-center justify-center
                     rounded-xl'>
-                        <Image  src={image ? image : imagexample} width={200} height={200} className='rounded-full' alt='profile image'/>
-                        <h1 className='text-center text-2xl font-bold'>{firstName} {lastName}</h1>
-                        <h3 className='text-center text-xl'>{location}</h3>
+                        <Image  src={image ? image : imagexample} width={200} height={200} className='rounded-full translate-x-3' alt='profile image'/>
+                        <h1 className='text-2xl font-bold text-center'>{firstName} {lastName}</h1>
+                        <h3 className=' text-xl text-center'>{location}</h3>
                     </div>
                     <div className='w-full border-2 shadow-md col-span-2 grid grid-cols-1  p-8 rounded-xl'>
                         <div className='w-full grid grid-cols-2'>
@@ -228,7 +354,9 @@ export default function ProfileID({params}: {params: {id: string}}){
                         <hr className='my-3'/>
                         <div className='w-full grid grid-cols-2'>
                             <h3 className='font-bold'>Interests</h3>
+                            {interests.length > 0 && (
                             <h3>{interests.map((interestObj: { interest: string }, index: number) => interestObj.interest).join(', ')}</h3>
+                            )}
                         </div>
                         <hr className='my-3'/>
                         <div className='w-full grid grid-cols-2'>
@@ -259,14 +387,8 @@ export default function ProfileID({params}: {params: {id: string}}){
                     </div>
                     {/* <div className='w-full border-2 shadow-xl p-4 grid gap-2 items-center justify-center
                     rounded-xl'> */}
-                    <div className='w-full'>
-                        {/* <div className='w-full grid grid-cols-1 gap-2'> 
-                            <h1 className='text-5xl text-center'>{avgRating}</h1>
-                            <Rating2  name="half-rating" value={avgRating} precision={0.5} />
-                            <h3 className='text-center'>Average Rating</h3>
-                        </div> */}
-                    </div>
-                    <div className='w-full border-2 shadow-md col-span-2 p-4 grid grid-cols-3 gap-2 items-center justify-center
+                   
+                    <div className='w-full border-2 shadow-md lg:col-span-3 md:col-span-3 xs:col-span-3 p-4 grid grid-cols-3 gap-2 items-center justify-center
                     rounded-xl'>
                         <div className='w-full grid grid-cols-1 gap-2 items-center justify-center'> 
                             {/* { avgRating === 0 ? (} */}
@@ -276,7 +398,7 @@ export default function ProfileID({params}: {params: {id: string}}){
                             </div>
                             <h3 className='text-center'>Average Rating</h3>
                             <div className='w-full text-black text-opacity-50'>
-                                <h4 className='text-center'>Ratings Count1: {ratingsCount}</h4>
+                                <h4 className='text-center'>Ratings Count: {ratingsCount}</h4>
                             </div>
                             
                         </div>

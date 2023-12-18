@@ -16,6 +16,7 @@ import { Label } from 'flowbite-react';
 
 export default function AccountProfile(){
 
+    const isMountedRef = useRef(true);
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [location, setLocation] = useState('');
@@ -31,6 +32,10 @@ export default function AccountProfile(){
         { name: 'Cats', value: 'Cats'},
         { name: 'Birds', value: 'Birds'},
         { name: 'Horses', value: 'Horses'},
+        { name: 'Rabbits', value: 'Rabbits'},
+        { name: 'Small & Furry', value: 'Small & Furrys'},
+        { name: 'Scales, Fins & Other', value: 'Scales, Fins & Others'},
+        { name: 'Barnyard', value: 'Barnyards'},
     ];
 
     const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -47,7 +52,7 @@ export default function AccountProfile(){
 
       useEffect(() => {
         const email2 = localStorage.getItem('email');
-        axios.get(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/get-user/${email2}`)
+        axios.get(`https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/profile/${email2}`)
             .then((response) => {
                 console.log("Resposta info utilizador:", response.data);
                 if(response.data.firstName !== null){
@@ -80,6 +85,7 @@ export default function AccountProfile(){
       }, []);
       
       async function sendData(){
+        const token3 = localStorage.getItem('access_token');
         console.log("entrou");
         const formData = new FormData();
         const confirmed = window.confirm('Are you sure you want to edit your profile?');
@@ -95,14 +101,32 @@ export default function AccountProfile(){
                 formData.append('image', image);
             }
 
-            axios.put(`https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/edit-user-profile/${email}`, formData)
+            axios.put(`https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/profile/${email}`, formData, {
+				headers: {
+					Authorizer: `${token3}`,
+				}
+			})
             .then((response) => {
                 console.log("Resposta info editada do utilizador:", response.data);
                 sendNot();
                 window.location.href = `/account/profile/${email}`;
             })
             .catch((error) => {
-                console.log("Erro:", error);
+                if (error.response && error.response.status === 401 && isMountedRef.current) {
+                    // Unauthorized, handle accordingly (e.g., redirect to login)
+                    console.error('Unauthorized request:', error.message);
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('email');
+                    localStorage.removeItem('username'); 
+                    localStorage.removeItem('isAdmin');
+                    alert("You are not authorized to access this page. Please login.");
+                    isMountedRef.current = false;
+                    window.location.href = 'https://main.dzgh2fc7t2w9u.amplifyapp.com/';
+                    
+                  } else {
+                    // Handle other errors
+                    console.error('Error:', error.message);
+                  }
             })
         }
 
@@ -138,14 +162,19 @@ export default function AccountProfile(){
     }
 
     async function sendNot(){
+        const token3 = localStorage.getItem('access_token');
         const data = {
-            "to": email,
+            "to_list": [email],
             "subject": "Profile Updated",
             "message": `Your Profile has been updated.`
         }
         try {
             // Make the API call using axios
-            const response = await axios.post('https://kov0khhb12.execute-api.eu-north-1.amazonaws.com/v1/notification', data);
+            const response = await axios.post('https://gqt5g3f1h4.execute-api.eu-north-1.amazonaws.com/v1/notifications', data, {
+				headers: {
+					Authorizer: `${token3}`,
+				}
+			});
       
             // Handle the response
             console.log('API Response:', response.data);
@@ -164,7 +193,7 @@ export default function AccountProfile(){
         <>
         <AnimatedText text='Edit Profile' className='text-center text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mb-16 mt-8 '/>
         <Layout className='flex items-center justify-center'>
-            <div className='w-2/3 grid grid-cols-3 gap-8 border-2 shadow-xl p-24 rounded-xl'>
+            <div className='lg:w-2/3 md:w-full xs:w-full grid lg:grid-cols-3 md:grid-cols-3 xs:grid-cols-1 gap-8 border-2 shadow-xl p-24 rounded-xl'>
                 <div className='w-full col-span-2'>
                     <div className="w-full p-float-label">
                         <InputText id="username" value={username} onChange={(e) => setUsername(e.target.value)} className='h-12 w-full p-4' disabled  />
@@ -183,7 +212,7 @@ export default function AccountProfile(){
                     </div>
                     <div className='w-full items-center justify-center text-center'>
                         <Toast ref={toast}></Toast>
-                        <FileUpload mode="basic" name="demo[]"  accept="image/*" maxFileSize={1000000} onSelect={handleFileUpload} chooseLabel='New Image'
+                        <FileUpload mode="basic" name="demo[]"  accept="image/*" maxFileSize={100000000000} onSelect={handleFileUpload} chooseLabel='New Image'
                           className='mt-2' />
                     </div>
                 </div>
@@ -212,7 +241,7 @@ export default function AccountProfile(){
                     </div>
                 </div>
                 <div className='w-full'>
-                    <div className="card flex flex-wrap justify-content-center gap-3">
+                    {/* <div className="w-full grid grid-cols-3 gap-8">
                         <div className="flex align-items-center">
                             <Checkbox inputId="ingredient1" name="pizza" value="Dogs" onChange={onIngredientsChange} checked={ingredients.includes('Dogs')} />
                             <label htmlFor="ingredient1" className="ml-2">Dogs</label>
@@ -229,7 +258,63 @@ export default function AccountProfile(){
                             <Checkbox inputId="ingredient4" name="pizza" value="Horses" onChange={onIngredientsChange} checked={ingredients.includes('Horses')} />
                             <label htmlFor="ingredient4" className="ml-2">Horses</label>
                         </div>
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient4" name="pizza" value="Horses" onChange={onIngredientsChange} checked={ingredients.includes('Horses')} />
+                            <label htmlFor="ingredient4" className="ml-2">Horses</label>
+                        </div>
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient4" name="pizza" value="Horses" onChange={onIngredientsChange} checked={ingredients.includes('Horses')} />
+                            <label htmlFor="ingredient4" className="ml-2">Horses</label>
+                        </div>
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient4" name="pizza" value="Horses" onChange={onIngredientsChange} checked={ingredients.includes('Horses')} />
+                            <label htmlFor="ingredient4" className="ml-2">Horses</label>
+                        </div>
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient4" name="pizza" value="Horses" onChange={onIngredientsChange} checked={ingredients.includes('Horses')} />
+                            <label htmlFor="ingredient4" className="ml-2">Horses</label>
+                        </div>
+                        
+                    </div> */}
+                </div>
+                <div className='w-full col-span-2'>
+                <label className='text-black text-opacity-50 text-xs' htmlFor="checkbox">Interests</label>
+                    <div id='checkbox' className="w-full grid lg:grid-cols-4 md:grid-cols-2 xs:grid-cols-2 gap-4 mt-4">
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient1" name="pizza" value="Dogs" onChange={onIngredientsChange} checked={ingredients.includes('Dogs')} />
+                            <label htmlFor="ingredient1" className="ml-2">Dogs</label>
+                        </div>
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient2" name="pizza" value="Cats" onChange={onIngredientsChange} checked={ingredients.includes('Cats')} />
+                            <label htmlFor="ingredient2" className="ml-2">Cats</label>
+                        </div>
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient3" name="pizza" value="Birds" onChange={onIngredientsChange} checked={ingredients.includes('Birds')} />
+                            <label htmlFor="ingredient3" className="ml-2">Birds</label>
+                        </div>
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient4" name="pizza" value="Horses" onChange={onIngredientsChange} checked={ingredients.includes('Horses')} />
+                            <label htmlFor="ingredient4" className="ml-2">Horses</label>
+                        </div>
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient5" name="pizza" value="Rabbits" onChange={onIngredientsChange} checked={ingredients.includes('Rabbits')} />
+                            <label htmlFor="ingredient5" className="ml-2">Rabbits</label>
+                        </div>
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient6" name="pizza" value="Small & Furrys" onChange={onIngredientsChange} checked={ingredients.includes('Small & Furrys')} />
+                            <label htmlFor="ingredient6" className="ml-2">Small & Furrys</label>
+                        </div>
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient7" name="pizza" value="Scales, Fins & Others" onChange={onIngredientsChange} checked={ingredients.includes('Scales, Fins & Others')} />
+                            <label htmlFor="ingredient7" className="ml-2">Scales, Fins & Others</label>
+                        </div>
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="ingredient8" name="pizza" value="Barnyards" onChange={onIngredientsChange} checked={ingredients.includes('Barnyards')} />
+                            <label htmlFor="ingredient8" className="ml-2">Barnyards</label>
+                        </div>
+                        
                     </div>
+                    
                 </div>
                 <div className='w-full col-span-2'>
                     <div className="p-float-label w-full ">
